@@ -243,3 +243,296 @@ Nesta aula, aprendemos:
 Implementar listener para AdapterViews;
 Utilizar o log do Android;
 Transferir dados entre Activities.
+
+#### 09/09/2023
+
+@02-Editando aluno pelo formulário
+
+@@01
+Editando aluno
+
+Conseguimos carregar os nossos alunos no formulário, agora a gente precisa implementar o comportamento para editá-los, mas como que a gente pode estar fazendo isso? Considerando os princípios de edição uma das primeiras preocupações que a gente precisa ter é em como que a gente garante que um aluno é ele mesmo, o que eu quero dizer com isso? Perceba que a gente tem uma lista de alunos e temos aqui o Alex e também a Fran, mas nada impede de a gente criar um novo Alex ou uma nova Fran, que tem informações similares ou até o mesmo o mesmo nome, ou seja, o nome já não é uma informação segura o suficiente para a gente falar que um aluno é ele mesmo, se a gente explorar um pouquinho mais as suas informações a gente tem tanto telefone como também e-mail que parecem sim informações ali mais pessoais, mais exclusivas para cada aluno. Claro, se elas não fossem informações editáveis, informações que os próprios alunos mandassem e a gente conseguisse pegar até poderíamos considerar, porém aqui no nosso aplicativo a gente edita essas informações e nada impede de um usuário preencher essas informações com informações iguais e então a gente poderia ter o caso no qual a gente teria um Alex com o mesmo telefone e com o mesmo e-mail e aí a gente correria o risco de editar alguém que a gente não espera. Portanto usar essas informações editáveis não é seguro o suficiente para poder colocar esse tipo de implementação, então a gente tem que recorrer a outras informações, a outros dados que a gente tem disponível que pode nos permitir garantir essa informação, essa unicidade do aluno. E o que é que a gente pode estar utilizando? Pensando aqui no que a gente tem a gente poderia considerar que é posição, dado que o que a gente está editando, por exemplo, seria o aluno na posição zero, independente do que for é o aluno da posição zero, isso não muda, a gente poderia estar considerando isso. Porém se a gente considerar essa parte de posição ela não costuma ser o padrão para esse tipo de identificação de uma entidade que seria o nosso aluno, então o que a gente vai utilizar aqui vai ser justamente um padrão que é muito comum que é separar exatamente um campo que ele vai servir como um código de identificação e a partir desse código de identificação, independente da posição, do nome, do e-mail, telefone, a gente vai ter certeza que vai ser esse aluno, está bom, porque ele sempre vai ter esse código de identificação e ninguém vai meter a mão nesse código, vai ser apenas o nosso aplicativo, está bom. Então vai ser a partir dele que a gente vai estar garantindo aqui que um aluno é ele mesmo, que vai ser a implementação de um ID, os nossos famosos IDs, está bom. Então vamos agora fazer com que o nosso aluno suporte esse ID para que a gente consiga usar isso como parâmetro no momento da edição. Então eu vou entrar na nossa classe aluno e dentro dela o que é que eu vou fazer? Eu vou agora colocar o novo campo que vai representar esse ID, está bom, esse campo eu vou colocar como um inteiro, tudo bem, porque a partir desse inteiro eu vou indicar que o valor zero é um valor que ele não tem ID, é claro, IDs podem ter campos diferentes, poderia até ser uma string usando um outro padrão, existem diversos padrões a serem discutidos sobre IDs, no curso eu vou usar esse inteiro justamente por ser um ser um padrão também bastante comum e bem simples de fazer implementação de uma maneira que a gente consiga gerar novos IDs de uma maneira uniforme, está bom? Então é por isso que eu vou manter ele dessa maneira. Legal, temos agora o nosso campo para um ID, que é exclusivo, e precisamos agora aplicar a técnica na qual a gente vai conseguir gerar novos IDs, afinal cada vez que entrar um novo usuário ele precisa ter um ID diferente, que é a ideia que a gente tem aqui de ID, certo? Para isso o que a gente precisa fazer? A gente precisa voltar aqui no nosso aluno e precisamos fazer alguma modificação que permita agora adicionar novos IDs cada vez que um aluno é adicionado, para isso a gente pode usar técnicas do próprio Java, que é bem simples, por exemplo, um atributo estático de inteiro que vai ser um contato de IDs, então a gente pode estar colocando um desses. Então seria um private static e a gente colocaria int e depois falaria que ele serviria como contador de IDs, contador de IDs, agora foi, e aí a gente poderia falar que a princípio ele começaria com um ID que equivale a um, porque esse ID seria um ID válido e aí para os posteriores ele incrementaria mais um colocando aquela técnica de incremento. Então agora como é que funcionaria aqui o nosso algoritmo, a nossa lógica? No momento que entrasse aqui no salvar a gente indicaria que o aluno que a gente está recebendo via parâmetro ele iria setar o ID, é claro a gente não tem set, o setter nesse momento, então vamos indicar que a gente vai querer fazer o setter a partir desse nosso argumento que vai ser o contador de IDs e vamos pedir para o Android Studio criar para a gente. Aqui das opções ele está sugerindo criar o método que teria o corpo vazio, criar uma propertie que seria justamente um getter e um setter ou então criar um write only que seria criar apenas um método de apenas escrita, que seria só o setter. Nesse caso vamos criar a propertie porque dessa maneira a gente já cria quem vai conseguir setar e quem vai conseguir devolver essa informação para a gente dado que a gente vai precisar dela. Então aqui ele pergunta se a gente quer comiter o argumento do setter, gente quer sim e também o nome ID é reverenciando aqui o nosso atributo ID e no getter ele já devolveu aqui o ID para a gente, então a gente tem acesso a esses nossos métodos de acessos do nosso atributo. Agora na parte de baixo o que a gente precisa fazer é atualizar o contador de IDs, afinal quando você adicionar um ID para um aluno o próximo aluno tem que ter um ID diferente, certo? Então aqui entraria o contador de alunos, aliás, de IDs, desculpa, e colocaria o mais ++ que é pós incremento aqui, cada vez que executar esse código no final da execução ele vai fazer aqui o incremento adicionando mais um e aí vai vir o ID dois, ID três e assim por diante, está bom? Então a gente conseguiu agora criar aqui esse gerador de IDs e estamos atribuindo os IDs para os nossos alunos, portanto a gente já pode começar a colocar o comportamento de editável, então logo aqui mesmo no próprio aluno a gente pode fazer um public void edita que vai receber também o aluno, que a gente vai assumir que esse aluno ela te, há um ID, e dado que a gente assume que ele tem um ID agora a gente vai ter a capacidade, por exemplo, de buscar esse aluno a partir da nossa lista fazendo a comparação de IDs. Então o que a gente vai fazer aqui no nosso código é algo muito bem simples, a gente vai fazer um for it que vai passar por cada aluno contido na lista, desculpa, e aqui dentro eu vou fazer o seguinte, a partir dessa referência do A, eu coloquei A porque justamente aqui no parâmetro a gente está recebendo o aluno, então não tem como repetir o aluno, está bom? Então a partir desse nosso valor A eu vou fazer uma comparação, que vai ser a seguinte comparação, eu vou verificar, por exemplo, se o ID do A é igual ao ID do aluno que a gente está recebendo via parâmetro, porque se a gente encontra essa informação, se isso daqui é verdade, a gente conseguiu encontrar o aluno que a gente quer editar, e aí dessa maneira a gente consegue colocar esse aluno para uma nova referência, um objeto e fazer a edição da maneira que for necessária. Então o que é que eu vou fazer aqui agora? Eu vou pegar agora e criar essa nova referência que, a princípio, ela vai ser um aluno encontrado, a gente vai assumir que seja isso e vai ter valor nulo, porque se ele manter esse valor nulo a gente vai assumir que ele ainda não foi encontrado e aí quando ele é encontrado aqui dentro desse nosso código, dessa nossa lógica a gente atribuiu agora esse novo valor para ele, está bom. E aí agora o que a gente precisa fazer? Agora que a gente tem a possibilidade de encontrar ou não, logo depois aqui do nosso for it a gente precisa fazer uma lógica na qual vai permitir que esse aluno ele seja editado, certo? Então seria, por exemplo, uma lógica que garante que ele não é nulo, então aluno encontrado é diferente de nulo para poder não tomar no null pointer exception dado que é uma possibilidade, existe essa possibilidade. E logo aqui nessa outra parte aqui dentro do nosso if que a gente garante que esse aluno ele realmente ele existe, ele foi encontrado, a gente faz a edição. Para fazer a edição, dado que a gente utiliza aqui uma lista de alunos, a gente precisa substituir esse aluno a partir da posição dele, então o primeiro passo é pegar a sua posição, então a gente vai ter aqui um alunos.indexOf para pegar a posição dele a partir do nosso aluno encontrado, a gente vai ter acesso aqui a posição do aluno, posição do aluno. Aí em seguida o que a gente faz é justamente fazer aqui a substituição que vai ser alunos.set, então a partir do set a gente a tem a capacidade de dar a posição que a gente encontrou e substituir o aluno. Então o aluno que a gente quer colocar nesse momento é justamente o aluno que veio de fora, que é o nosso parâmetro. Então esse é o nosso código aqui para fazer a edição, primeiro a gente encontra o aluno e depois a gente verifica se ele realmente existe e aí então a gente aplica a edição, está bom? Então esse é o nosso código. Para poder formatar aqui bonitinho eu vou colocar o atalho ctrl L e ele já faz a identação bonitinha para a gente. Agora que a gente tem esse comportamento a gente só precisa usar aqui no nosso formulário, certo? Então voltando aqui no nosso formulário a gente precisa usar essa edição, dado que nesse momento o que é que a gente faz? A gente só está salvando, vamos fazer o seguinte, vamos comentar esse código aqui, está bom, e agora a gente vai fazer uma implementação na qual a gente vai editar, a gente vai usar aquele comportamento de edição, está bom. Então como que a gente vai usar esse comportamento? Se a gente chegar aqui no nosso código e simplesmente colocar um ponto edita, a gente precisa mandar uma referência de um aluno, certo? Se a gente mandar da maneira como a gente estava fazendo no momento que a gente tenta salvar a gente não vai ainda manter a informação de ID porque aqui ele está criando um novo aluno com as informações dos campos, ele está criando com essas informações dos campos, então o que a gente precisa fazer agora é seguinte: no momento que a gente for salvar a gente precisa fazer com que esse cria aluno ele seja modificado também, tenha um novo comportamento ao invés de criar um novo aluno, ele apenas preenche aqui agora com essas informações atualizadas, tudo bem? Então ao invés de ter que ficar ali criando um novo aluno a gente vai usar essa referência que a gente tem aqui e a partir dessa referência ele faz essas modificações, ele vai atualizando as informações do aluno, para que então a gente manter as informações atualizadas e também tenha acesso ao ID. Então o primeiro passo vai ser transformar esse aluno em um atributo para que todos os métodos tenham acesso, aí em seguida no momento em que a gente pede para criar um aluno a gente, na verdade, vai atualizar essas informações, está bom. Então vamos lá, vamos atualizar aqui as informações, a gente vai ter e-mail, telefone e e-mail, aliás, nome, telefone e e-mail, desculpa, eu tinha falado e-mail ao mesmo tempo, e ao invés de criar aqui um novo aluno vamos remover essa linha e vamos só atualizar essas informações. Então a partir do aluno a gente vai criar aqui os seus setters, está bom? Então vamos agora criar os setters para esse aluno para não ter que fazer isso manualmente. Para isso a gente pode voltar aqui no nosso código fonte da classe aluno, usar o out insert e vim nessa opção de setter, aí ele já vai lá e cria o setter para a gente, está bom? Ele falou que não encontrou setter porque a gente tem atributos final. Então o que é que eu vou fazer aqui nesse momento? Nesse momento eu vou apagar aqui esses finallys e agora eu vou fazer com essas informações sejam editáveis, dado que antes não era, mas agora vai ser, está bom? Então vamos lá, agora que elas serão editáveis a gente vai pegar aqui os nossos out inserts de novo, que é aquele templete, vamos agora selecionar todos os campos e vamos colocar aqui esses setter, colocamos os setters, o que a gente precisa fazer agora é simplesmente usar aqui o set de novo para colocar o nome, o set, vamos lá, aluno set telefone para colocar o telefone e também o aluno set e-mail para colocar o e-mail, e agora assim a gente está atualizando aqui o nosso aluno, inclusive a gente pode até modificar o nome desse método, ao invés de ser um crie aluno eu vou usar o shift F6 para atualizar o nome, ao invés de ser o crie aluno vai ser preenche aluno, aí já fica muito mais fácil o que ele faz. Aí está perguntando se a gente quer fazer a refatoração, sim, a gente quer por mais que aqui esteja comentado, ele já vai fazer isso para a gente, e também a gente não vai devolver mais nada, porque agora ele está usando a referência via atributo, aí pode apagar até o no null que estava tentando garantir que não mandasse uma referência nula. Beleza, a gente conseguiu criar agora o nosso preenche aluno, a gente vai chamar ele aqui embaixo e agora a gente assume que no momento que ele está preenchendo a gente consegue acesso a esse aluno, está bom? E aqui no edita a gente manda o nosso aluno via atributo, o acesso que eu falo ao aluno é o aluno atualizado. Então agora sim a gente conseguiu colocar o comportamento de editável, podemos testar e ver o que acontece. Shift F10 para testar, eu vou abrir aqui o emulador para a gente ver como é que vai ficar aqui esse nosso novo comportamento, veja que foram bastantes espaços, mas realmente não é uma coisa tão complexa assim, a questão é que realmente ali existem várias teorias, vários motivos para fazer da maneira como a gente fez. Agora eu vou tentar editar, por exemplo, o Alex, então o Alex ele vai estar aqui bonitinho para a gente e eu vou colocar como Alex Felipe por exemplo, e o telefone de 12222 eu vou deixar no final 444 e o e-mail eu vou deixar apenas .com para ver se edita também todas as informações. Eu vou clicar em salvar e vamos ver o que é que acontece. Nessa de salvar ele não saiu porque a gente não colocou o comportamento, certo, então por isso que ele não saiu, mas voltar aqui e ver o que é que acontece no momento que ele carrega, ele carrega aqui com o Alex Felipe, então ele carregou com o Alex Felipe, com as informações atualizadas e o que a gente precisa fazer aqui é só dar um finish que eu acabei esquecendo aqui como a gente fazia aqui no de salvar. Então dando um finish só para poder testar novamente aquele comportamento de fechar o formulário e voltar para a nossa lista para a gente deixar tudo redondo antes de fazer qualquer outro passo a mais. Vamos só testar agora na Fran, então na Fran, por exemplo, eu vou deixar Fran Silva, eu só vou mudar apenas o nome que a gente viu que modifica ali os nossos outros campos, certo? Então salvando aqui ele fechou e já apareceu a Fran aqui para a gente. Se a gente editar de novo vamos ver o que acontece, olha só que bacana, Fran Tavares, por exemplo, e vamos salvar aqui para ver o que acontece, vamos lá, ele salvou tudo bonitinho. Então agora sim a gente conseguiu colocar esse novo comportamento para editar os nossos alunos, está bom. Então até já.
+
+@@02
+Adicionando id para o aluno
+
+Caso você precise do projeto com todas as alterações realizadas na aula passada, você pode baixá-lo neste link.
+Vamos dar início na implementação de edição de aluno. Nessa atividade o nosso objetivo é fazer o aluno suportar ids.
+
+Sendo assim, modifique a classe Aluno para que tenha um id, utilize o tipo int para o id. Altere o DAO para que gere um id novo para cada aluno que for salvo.
+
+O gerador de ids é feito a partir de um atributo estático.
+Crie o método edita() que recebe um aluno. Nesta implementação, primeiro implemente o código que busca um aluno a partir do seu id. Essa busca pode ou não encontrar um aluno, portanto, antes de editar certifique-se que o aluno não é uma referência nula.
+
+Para a edição, busque a posição do aluno que foi encontrado, então utilize o método set() da lista de alunos, enviando a posição do aluno encontrado e o aluno que foi enviado via parâmetro respectivamente.
+
+Esta atividade não precisa de execução. Porém,
+
+Para ter certeza que está funcionando, adicione um log dentro do listener para cada item imprimindo o id do aluno.
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/archive/aula-1.zip
+
+O código da implementação fica da seguinte maneira:
+Aluno.java:
+public class Aluno implements Serializable {
+
+    private int id = 0;
+
+    // restante do código
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+}COPIAR CÓDIGO
+AlunoDAO.java:
+public class AlunoDAO {
+
+    private final static List<Aluno> alunos = new ArrayList<>();
+    private static int contadorDeIds = 1;
+
+    public void salva(Aluno aluno) {
+        aluno.setId(contadorDeIds);
+        alunos.add(aluno);
+        contadorDeIds++;
+    }
+
+    public void edita(Aluno aluno) {
+        Aluno alunoEncontrado = null;
+        for (Aluno a :
+                alunos) {
+            if (a.getId() == aluno.getId()) {
+                alunoEncontrado = a;
+            }
+        }
+        if (alunoEncontrado != null) {
+            int posicaoDoAluno = alunos.indexOf(alunoEncontrado);
+            alunos.set(posicaoDoAluno, aluno);
+        }
+    }
+
+    // restante do código
+
+}COPIAR CÓDIGO
+Caso tenha interesse no teste para verificar se o id está sendo gerado da maneira esperada, adicione o seguinte log:
+
+listaDeAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long id) {
+        Aluno alunoEscolhido = alunos.get(posicao);
+        Log.i("idAluno", String.valueOf(alunoEscolhido.getId()));
+        // restante do código
+    }
+});COPIAR CÓDIGO
+Se testar com 2 alunos, deve aparecer a seguinte mensagem:
+
+br.com.alura.agenda I/idAluno: 1
+br.com.alura.agenda I/idAluno: 2
+
+@@03
+Editando aluno no formulário
+
+Na Activity de formulário, faça com que o objeto do aluno, inicializado pelo extra, seja um atributo.
+Em seguida, renomeie o método criaAluno() para preencheAluno(), e então, ao invés de criar um aluno, altere as informações do atributo que representa o aluno. Consequentemente esse método não vai mais devolver um Aluno, portanto, mude a assinatura para void.
+
+Se não tiver implementado os setters do aluno, aproveite e implemente nesse momento.
+Dentro do listener do botão salvar. Comente o código que salva, então, adicione o código que edita o aluno. Para a edição, primeiro chame o método preencheAluno() e depois o edita() do DAO, enviando o atributo aluno.
+
+Por fim, chame o método finish() para que o formulário seja fechado e a lista atualizada. Teste o App e veja se a edição funciona.
+
+O App deve apresentar o seguinte aspecto:
+
+
+O código desta implementação ficou da seguinte maneira:
+
+FormularioAlunoActivity.java:
+public class FormularioAlunoActivity extends AppCompatActivity {
+
+    public static final String TITULO_APPBAR = "Novo aluno";
+    private EditText campoNome;
+    private EditText campoTelefone;
+    private EditText campoEmail;
+    private final AlunoDAO dao = new AlunoDAO();
+    private Aluno aluno;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // restante do código
+
+        Intent dados = getIntent();
+        aluno = (Aluno) dados.getSerializableExtra("aluno");
+        campoNome.setText(aluno.getNome());
+        campoTelefone.setText(aluno.getTelefone());
+        campoEmail.setText(aluno.getEmail());
+    }
+
+    private void configuraBotaoSalvar() {
+        Button botaoSalvar = findViewById(R.id.activity_formulario_aluno_botao_salvar);
+        botaoSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Aluno alunoCriado = preencheAluno();
+////                salva(alunoCriado);
+                preencheAluno();
+                dao.edita(aluno);
+                finish();
+            }
+        });
+    }
+
+    // restante do código
+
+    private void preencheAluno() {
+        String nome = campoNome.getText().toString();
+        String telefone = campoTelefone.getText().toString();
+        String email = campoEmail.getText().toString();
+
+        aluno.setNome(nome);
+        aluno.setTelefone(telefone);
+        aluno.setEmail(email);
+    }
+}COPIAR CÓDIGO
+A seguir, vamos melhorar o código para que nosso app permita tanto editar como inserir alunos.
+
+@@05
+Flexibilizando formulário
+
+Agora, precisamos que o formulário permita tanto editar como salvar alunos. Para isso, no onCreate() envolva o código que pega o aluno via extra e preenche os campos do formulário em um if que verifica a existência do extra por meio do método hasExtra() da Intent.
+Caso contrário, faça com que o atributo do aluno seja inicializado por meio de uma instância vazia.
+
+Atualmente existe apenas um construtor que recebe parâmetros, ou seja, crie um construtor sem argumento.
+Modifique o código do listener do botão salvar para que antes de salvar ou editar, verifique se o id do aluno é válido.
+
+Para verificar se um id do aluno é válido, implemente o método temIdValido() na classe Aluno, todos ids maiores que 0 são válidos.
+
+Caso o id for válido, peça para o DAO editar, caso contrário peça para salvar. Por fim, chame o método finish() fora do escopo do if.
+
+Lembre-se de remover o método salva() da Activity, pois não é mais utilizado.
+Teste o App e veja se ele é capaz de salvar ou editar alunos.
+
+O App deve apresentar o seguinte resultado:
+
+
+O código ficou da seguinte maneira:
+
+FormularioAlunoActivity.java:
+public class FormularioAlunoActivity extends AppCompatActivity {
+
+    public static final String TITULO_APPBAR = "Novo aluno";
+    private EditText campoNome;
+    private EditText campoTelefone;
+    private EditText campoEmail;
+    private final AlunoDAO dao = new AlunoDAO();
+    private Aluno aluno;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_formulario_aluno);
+        setTitle(TITULO_APPBAR);
+        inicializacaoDosCampos();
+        configuraBotaoSalvar();
+
+        Intent dados = getIntent();
+        if (dados.hasExtra("aluno")){
+            aluno = (Aluno) dados.getSerializableExtra("aluno");
+            campoNome.setText(aluno.getNome());
+            campoTelefone.setText(aluno.getTelefone());
+            campoEmail.setText(aluno.getEmail());
+        } else {
+            aluno = new Aluno();
+        }
+
+    }
+
+    private void configuraBotaoSalvar() {
+        Button botaoSalvar = findViewById(R.id.activity_formulario_aluno_botao_salvar);
+        botaoSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                preencheAluno();
+                if(aluno.temIdValido()){
+                    dao.edita(aluno);
+                } else {
+                    dao.salva(aluno);
+                }
+                finish();
+            }
+        });
+    }
+
+    //restante do código
+
+}COPIAR CÓDIGO
+Aluno.java:
+public class Aluno implements Serializable {
+
+    private int id = 0;
+    private String nome;
+    private String telefone;
+    private String email;
+
+    public Aluno(String nome, String telefone, String email) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    public Aluno() {
+
+    }
+
+    // restante do código
+
+    public boolean temIdValido() {
+        return id > 0;
+    }
+}COPIAR CÓDIGO
+Veja que com esse ajuste o formulário fica flexível o suficiente para salvar ou editar alunos.
+
+@@06
+Refatorando código
+
+Agora que finalizamos a feature de edição de alunos e as anteriores estão funcionando da maneira esperada, a gente pode dar uma olhada nos códigos que a gente modificou, verificar se existe possíveis refatorações, e se existir, a gente aplica. Para isso vou deixar as classes que mexemos durante o procedimento abertas, e vou passando em cada uma delas vendo o que pode ser melhorado. Vamos começar com a lista alunos activity, dentro dela a gente mexeu bastante no método que configura a lista. Antes era mais enxuto, dado que só buscava listview, pegava acesso a todos os alunos a partir do nosso dao, e configurava o adapter. Agora, ele adicionou um comportamento a mais, também configura o listener para cada item, para cada clique de item, tem um listener. Vamos lá, precisamos deixar mais enxuto e resumido de forma que olhamos de cara e sabemos o que acontece em cada parte desse código. A gente viu que para isso temos técnicas de refaturacao que é a própria extração, então a gente pode extrair métodos, como o adapter, um código grande para todos esses passos, podemos extrair para um configura adapter, caso você não decorou o atalho, é o ctrl-alt-M que faz isso para gente. Agora, no listener, a gente pode extrair outro método, seria configura, listener, de clique por item, a gente pode fazer dessa maneira que fica bem descritivo o que estava sendo feito, ok? Então agora sim nosso configura lista ficou enxuto o suficiente para ficar claro o que está acontecendo. Mas tem um detalhe que eu não fiquei sabendo de algumas das peculiaridades da implementação de listener, veja que nessa implementação de listener, estamos mandando nosso listview, ele que precisa do listener, faz todo o sentido, et b estamos mandando a referência da lista, e acreditando que essa referência da lista é a mesma do nosso adapter, tudo bem, dado que estamos fazendo nosso código, não vamos ter modificação, vamos mandar a mesma lista, mas pode correr o risco de mandar uma lista diferente para a configuração de adapter e para a configuração aqui do nosso listener, fazendo com que a gente não tenha exatamente as mesmas informações, porque a gente depende bastante da lista para poder buscar um aluno, tudo bem? O que quero dizer com isso? Que dado que a gente está fazendo uma implementação dentro de uma adapter view, faz todo o sentido a gente explorar um pouco mais para evitar essas complicações, que seria mandar referências diferentes, tanto para o adapter, que estamos fazendo o uso, como também para nosso listener, referente ao adapter. Então, ao invés de ter essa lista, a gente não vai usar essa lista, e vamos pedir para o próprio adapter, que é acessível, no nosso on-item click, que ele nos devolva esse item, a gente vai usar essa técnica agora, vou apagar essa referência para evitar essa situação que pode acontecer e a gente vai pedir para o adapter, ele que vai devolver o aluno escolhido. Com o adapter, o que a gente pode fazer? Tem alguns métodos relacionados com o item, algum método aqui que é o Get item at position, então quando a gente faz esse get item at position, o que a gente vai fazer? Mandar a posição do item, o argumento, o parâmetro, desculpa, e ele vai ter a capacidade de devolver o objeto que está naquela posição. Se a gente mandou essa lista para o nosso adapter, ele pega dessa lista, se mandarmos uma lista qualquer, ele vai pegar. O que estiver no adapter, ele vai pegar, e a gente protege mais em relação a essa peculiaridade, tentar mandar duas referências de lista, acaba pegando o objeto que não é nem o esperado, porque a gente abriu a possibilidade, nosso programa abriu a chance desse bug. Então, por isso faz todo o sentido manter dessa maneira, claro, o adapter view no geral é uma técnica na qual ele usa o object como padrão, podemos tentar modificar, talvez dê certo, ele está vindo com generics, não permite deixar apenas como interrogação, e sempre vai usar o object padrão, a gente não tem muito o que fazer mesmo, mas dessa maneira, garantimos que sempre o que tiver configurado no adapter no nosso listview vai ser retornado da maneira esperada, essa refatoracao, existe também esse cuidado, muito importante a gente tomar cuidado. Agora que a gente conseguiu colocar essa técnica aqui, outra ideia que podemos aplicar é a parte do intente, porque também estamos fazendo dentro do nosso listener, seria, por exemplo, da mesma maneira como fizemos o de inserção, podemos criar um novo, o abre, formulário. Só que se a gente colocar abre formulário, aluno, activity, fica meio redundante, e também não vai dar ideia do que ele faz, que é abrir o formulário para editar um aluno, então o que a gente pode fazer é o seguinte, abrir formulário, modo editar aluno. Nessa maneira fica muito clara que a ideia desse cara é editar um aluno de verdade, então a gente vai ter esse comportamento de edição, vou modificar o nome aqui para deixar apenas aluno para ser um a referência genérica, e agora ficou mais claro, no momento em que estamos clicando em cada um dos itens do nosso listview, no caso do nosso adapter view, vamos estar escolhendo um aluno, e também a partir desssa escolha do aluno, a gente vai abrir o formulário no modo editar aluno. É dessa maneira que a gente faz. E agora a gente tem essa string solta, podemos extrair para uma constante, ctrl-alt-C, vou chamar a constante de chave com maiúsculo, chave aluno, que dessa maneira a gente identifica o valor que a gente está mandando aqui refere-se à chave do aluno. Aí só um detalhe aproveitando que estamos fazendo a refatoração, também podemos modificar esse outro cara, que está bem genérico e podemos deixar da mesma maneira como está ali, esse cara é o abre formulário aluno activity, que ao invés de ser esse nome genérico, podemos colocar similar ao de edição, que seria abre formulário, modo, insere aluno. Fica muito claro o objetivo de abrir o formulário, e para o que vai ser usado. Conseguimos fazer a refatoração, para a nossa lista alunos activity, eu vou executar nosso projeto, ver se funciona da maneira esperada, comportamentos básicos, não vou testar de uma maneira profunda, porque essa refatoração não costuma ter impacto no código. Temos os mesmos comportamentos, vamos tentar abrir o formulário, abre bonitinho conforme nossa técnica de pegar diretamente do adapter, está bom? Só lembre que aqui vai sempre devolver um object e você vai ter que fazer o cast para o que você espera, se ele dentro do adapter não tiver o que espera, vai dar problema, é um cuidado a se tomar. Você vê e vai ser o problema de cast, não conseguiu dar um class cast e manda class cast exceptions. Finalizamos o list 1 do activities, agora vamos para o formulário aluno activity. Aqui dentro, uma das técnicas que faz todo o sentido a gente ver logo de cara com vocês, em relação a essa chave, porque essa chave, corremos um risco enorme de errar, de digitar, erro humano, acontece, então faz todo sentido manter uma constante, pegar a constante que criamos no activity, o chave aluno, está como pública e estática, conseguimos importar. Esse é o primeiro procedimento, quero que vocês deixem a chave como constante, porque evita o risco de erro de digitação, muito comum de acontecer. Só mais um detalhe, quando a gente quer manter essas constantes compartilhadas entre activities, costumo criar uma interface dentro do pacote de UI, que é onde estamo as activities, então UI.activity, e indicar que representa constantes de activities que serão compartilhadas entre elas, que dessa maneira não ficamos com uma única activities que vai manter constantes, ou uma outra vai manter várias ou menos constantes, então fica uma bagunça. Para isso eu crio uma interface, alt e setinha para baixo, interfaces, constantes, activities, e aqui eu deixo dessa maneira. Você pode deixar plural para não confundir com activity entidade do android, então você deixa constant activities, para poder indicar que são constantes de activities, esse é outro fator importante, tudo que você deixar com o sufixo activity, pode se confundir com a activity, entidade do Android, por isso faço no plural para evitar esse problema. Eu removo essa constante, coloco na nova interface, não precisamos nem manter public, static, final, porque ele já é isso como padrão, e agora eu faço uso nas nossas activities, certo, então, aqui na nossa lista eu faço o import dela aqui, import estático aqui, e no formulário também, import estático, conseguimos resolver esse problemão, vamos evitar o problema de digitação, fazemos o erro de digitação ter um problema. Agora, o que a gente pode estar fazendo aqui, dado que a gente está fazendo essa configuração toda bonitinha, podemos extrair para um comportamento maior, qual seria esse comportamento maior, o ctrl-alt-M ali, carrega aluno, a gente pode estar fazendo isso, ou então carregue informação dos alunos, da maneira que você preferir, vou deixar da maneira mais enxuta, porque tem outros passos ali dentro, que a gente pode até extrair para mais comportamentos. Então, seria o carrega aluno, porque no objetivo geral ele vai inicializar esse aluno para gente. Bacana, carrega o aluno, sempre vamos fazer depois que inicializar os campos, é um fator importante de considerar, e agora, o que vamos fazer aqui é justamente extrair mais comportamentos, quando preenchemos os campos, podemos extrair para outro método, o preenche campos, podemos extrair por outro método que seria o preenche campos, nada mais justo, a gente pode fazer isso sem problema. Agora temos um método bem enxuto e conciso, verificar que tem um extra, se tiver inicializar os alunos e preenche os campos, e se tiver faz a inicialização. Outro fator importante que eu quero mostrar para vocês, eu nem tinha comentado mas agora vou aproveitar e comentar. Percebe que na edição estamos colocando como novo aluno, e na inserção deixamos como novo aluno, sendo que na inserção deveria ser novo aluno, e na edição deveria ser edita aluno. Eu vou pegar nosso título que a gente está setando aqui, e vou migrar ele para que ele fique na parte de baixo, onde a gente consegue ter um modo de edição e de inserção, conseguimos garantir, e quando for um aluno que não tem um ID, um extra, vamos colocar no nosso título padrão, vou até mudar o nome para falar que é o appbar, novo, aluno. E quando isso não acontecer, certo, quando a gente tiver um extra, um aluno editável, vamos mudar para outro nome que seria, vou colocar o novo, vou atualizar, vou criar o novo, seria título appbar, edita aluno, vou pedir para ele criar a constante, ele criou, vou deixar como string porque queremos como string, e vou deixar como edita aluno, e dessa maneira a gente evita esse comportamento estranho que são títulos iguais para ações diferentes, você percebe que ele deixou como privado o novo, e o outro como público. Vou deixar privado. Vamos ver como ficou, se o código mudou alguma coisa, está tendo problema de compilação, ele não está compilando, porque ele fez um import estático e não conseguiu utilizar. Com ctrl-alt-O, ele otimizou e agora está compilando de novo, vamos testar e ver o que acontece. Agora a gente colocou esses títulos diferentes, vamos ver como ficou a diferença com esse código novo, se a gente tenta adicionar o novo aluno, vai ser o título anterior, agora se tenta editar, ele coloca editar aluno, ficou muito mais coerente. Continuando com a parte de fatoração, a gente vê que a gente carrega os alunos bonitinho, vou tirar essa linha, carrega aluno, a gente não tem nenhum problema e aqui a gente preenche aluno depois verifica se vai salvar ou editar, veja que tem um pouco mais de complexidade, então a gente pode indicar que vamos finalizar o cadastro, o formulário, então, a gente vai e coloca como método do formulário e chama de finaliza formulário que no finaliza formulário ele decide o que fazer, não a gente. Finaliza formulário e a gente sabe que vai finalizar, mas primeiro ele vai preencher os campos do aluno e vai decidir se vai editar ou salvar para depois finalizar, então realmente está bem coeso com o que a gente precisa, temos aqui o preenche aluno, o que preenche os a tributos conforme os campos, e a inicialização dos campos, que é o que a gente já viu. Então, nosso código está bem coeso, pode ser que seja grande, mas está bem dividido para o que ele faz, ele tem todos os comportamentos muito bem definidos. Agora, vamos voltar para nossa classe aluno, então, na classe aluno, temos nosso ID, nome, telefone, temos a sobrecarga e essa outra, e não tem problema, temos nossos getters e setters, ambos sendo usados, então tudo bem manter, temos nosso two-string, tem que realmente faz verificação do ID, agora, o que temos de novo? Nosso contador de ID, e aquele comportamento que atualiza ID, que eu comentei que faria sentido deixar dentro de um método, vamos extrair para esse método. Atualiza, e a gente deixa dessa maneira, podemos deixar um nome mais específico, como preferir, mas entenda que quando você chamar esse comportamento é porque quer adicionar novo ID, pode deixar com esse nome que tem esse tipo de significado. Da mesma maneira, o que podemos fazer é extrair alguns comportamentos, esse seria o interno nosso que é o edita aluno pela posição, vamos até extrair, edita aluno pela posição, se eu deixar dessa maneira, veja que ele pega os dois argumentos, não fica tão legal dessa maneira, vou pegar aqui esse código inteiro e não vai ficar legal, vai pegar sempre da maneira como está, deixar dessa maneira é suficiente, senão vai ficar estranho, se colocar outro edita vai ficar estranho, nesse não sei se vale a pena extrair, mas nesse acho que já vale, porque buscamos o aluno pelo ID, vale a pena. Ctrl-alt-M, busca aluno pelo ID. Aqui acho que dá para fazer. Ele está buscando, aluno encontrado, aí sim, se ele não for nulo, ele vai buscar a posição, agora sim faz todo o sentido, a primeira extração que fiz não ia ficar legal e não ia valer a pena, ia ter 2 argumentos de novo, mais complexidade. Da maneira como está é suficiente para atender a maneira como é esperado. Então, aqui na parte do edita foi tudo muito bem feito, na parte de busca também, podemos fazer uma técnica melhor, que é o famoso early return, quando a gente encontra aqui, a gente retorna o A, e quando não encontra, retorna nulo. Fica até mais fácil, quando você vê comportamentos assim, que você cria uma variável com inicialização não desejada para fazer uma interação com for para recuperar o valor, transforma num método e deixa early return, você pode fazer dessa maneira que não tem nenhum problema. Nosso aluno dao também está resolvido, podemos executar nosso projeto, é dessa maneira que vemos se funciona como esperado, vamos fazer os testes para ver se tudo funciona, e se a gente finaliza, a gente conclui que a tarefa foi feita. Para inserir novo aluno, vou colocar o Gui, telefone qualquer, só para ir rápido, teste bem simples, criei o Gui, bacana, vou clicar nele de novo e aparece as informações dele, agora 4, 5, 6, e vou deixar Gui Silveira, participando de novo com a gente, .com.br, para poder editar, vou clicar em salvar, salvou e está mantendo informações conforme esperado, agora sim a gente refatorou, finalizou bonitinho, colocamos até mesmo o título que não tínhamos dado tanta atenção antes e ficou bacana nossa parte do projeto, essa feature fechou da maneira esperada, então até já.
+
+@@07
+Aplicando a refatoração
+
+Analise e refatore o código das classes envolvidas durante a implementação da edição de alunos: Aluno, AlunoDAO, ListaAlunosActivity e FormularioAlunoActivity.
+Lembre-se de utilizar as mesmas técnicas vistas em curso, como é o caso de extração de métodos ou interfaces.
+
+Para cada refatoração execute e veja se tudo funciona como esperado.
+
+Nesta atividade são realizadas várias alterações em diversos pontos de código. Para deixar um feedback mais preciso sobre o que foi modificado, confira o commit via GitHub especificando todas as alterações.
+É válido ressaltar que a refatoração não precisa ser feita apenas de um jeito, portanto, se você chegou a um resultado diferente porém, o código está bem organizado e compreensível, não tem problema.
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/commit/6d309e5546d0b21a2066eeabbbd1a4ca1661c254
+
+@@08
+Sobre cuidados com o extra
+
+Quando começamos a implementar a edição do aluno na Activity de formulário, o comportamento de inserir um novo aluno quebrava o App. Por qual motivo isso acontecia?
+
+Porque não usamos o extra ao abrir o formulário via FAB.
+ 
+Alternativa correta
+Porque comentamos o código de salvar o aluno no formulário.
+ 
+Alternativa correta
+Porque não verificamos a existência do extra no formulário.
+ 
+Exatamente! A utilização de extra sem verificação corre o risco do extra não ser enviado e receber uma referência nula.
+Alternativa correta
+Porque esquecemos de colocar um log no listener do FAB.
+
+@@09
+O que aprendemos?
+
+Nesta aula, aprendemos a:
+Lidar de maneira adequada com extra;
+Implementar comportamentos de edição;
+Salvar e editar na mesma Activity de formulário;
+Refatorar código.
