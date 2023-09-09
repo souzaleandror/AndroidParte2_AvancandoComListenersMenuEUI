@@ -536,3 +536,153 @@ Lidar de maneira adequada com extra;
 Implementar comportamentos de edição;
 Salvar e editar na mesma Activity de formulário;
 Refatorar código.
+
+####
+
+@03-Removendo aluno da lista
+
+@@01
+Removendo aluno no DAO
+
+Por mais que nosso aplicativo permita corrigir os possíveis erros dos nossos usuários, como também adicionar informações aos alunos, ainda tem um comportamento que ele não suporta e é muito comum em aplicativos, o de remoção. Ele se faz necessário quando a gente coloca registros que fazemos por teste e não queremos manter. Ou de repente você colocou 10 alunos e 5 deles não fazem mais parte da sua agenda, você não quer mais manter. Em outras palavras, esse tipo de comportamento é muito comum e esperado para os nossos usuários e faz todo sentido trabalhar em cima deles para adicionar em nosso aplicativo, e é isso que vamos fazer agora. Então, vamos começar a implementar o comportamento de remoção, dado que todas as features que a gente fez, foi feita com base em ação, float action button, e também para editar o aluno foi por meio de clique. Exploramos bastante nas duas opções o clique. E como que a gente pode colocar nova ação que vai permitir a remoção, dado que usamos o clique para alteração? No sistema android, temos outros tipos de ação que podemos fazer e que vai ter um listener atento para esse tipo de ação, dentre eles uma segunda opção que os usuários costumam fazer é clicar num elemento e segurar, conhecido como pressionar, essa pressão é outro tipo de gesto, ação, que existe um listener por trás que a gente pode estar adicionando comportamentos e vai ser por meio desse listener que vamos colocar o comportamento de remoção. Vamos trabalhar em cima dele, para isso voltamos na lista alunos activity, então lista, alunos, activity, e no momento que pegamos referência de nossa lista, que fazemos a configuração, podemos adicionar o novo listener. Dado que é um adapter view, vamos ter um set on item, e a partir desse set on item que vamos ver a nova possibilidade. Lista de alunos.setonitem. Se a gente ver aqui a primeira opção é justamente um item click listener, que foi o que a gente implementou para editar, e aqui embaixo tem esse outro carinha, o long, que representa justamente aquela pressão. Se a gente colocar isso, vamos ter a capacidade de pegar o listener que vai ficar atento com a parte de pressão, então vamos lá, vou fazer a implementação da interface que é justamente também a on item long click listener. Bem óbvio, dado que sempre que você tem o nome do seu setter, vem com o nome da interface da mesma maneira, então vou implementar a nossa interface, e ele tem uma interface muito similar ao que vimos no on item click, justamente os 4 parametros que se referem ao adapter view, a view, aqui a gente viu que é a posição, e por fim nosso ID, então aqui temos esses parâmetros acessíveis que podemos utilizar nesse evento. Dado que a gente implementou ele, vamos fazer um teste, colocando por exemplo, um log, para ver se está funcionando da maneira como comentei com vocês. Então, vou colocar um log i, esse template que temos, e vou registrar esse cara para identificar que foi um clique longo, essa pressão que foi feita, vou deixar como clique longo, e aqui vou deixar novamente a posição para gente sempre ter como referência para verificar se está pegando o aluno esperado, então aqui conseguimos colocar nosso log, vamos testar e ver o que acontece, aqui vou fazer o shift-F10, vou entrar no log-catch, e colocar o filtro para nosso aplicativo quando aparecer, então vamos ver se aparece aqui, enquanto está carregando, por isso que não apareceu, vamos esperar carregar e a gente coloca o filtro. Parece que está finalizando, então acho que vai ser possível, ele colocou o pacote, e agora coloquei no chão select application. Nesse primeiro log, a gente não precisa saber, dado que o log que a gente quer é quando faz uma iteração. Vou clicar, pressionar, e ele aparece, clique longo, 0. Então percebe que agora está funcionando. Se eu soltar, veja o comportamento que tem, ainda vai acionar o clique normal, e geralmente não é o comportamento esperado, dado que a gente fez outra ação, então não esperava a ação de clique. Por que isso acontece? É o seguinte, quando a gente faz um clique longo, principalmente quando implementa via essa interface, a gente tem a opção de consumir por inteiro esse evento ou então passar para frente, e por padrão, configurando dessa maneira, estamos passando para frente, e para poder alternar entre consumir esse evento inteiro ou então passar para gente, a gente modifica esse retorno, então, tudo indica que o falso, assume que você não vai consumir o evento todo, mas se deixar como true, indica que vai consumir e não passa para frente, então o clique normal não vai funcionar se colocarmos como true. Vamos testar e ver o que acontece, shift-F10, vou abrir nosso log-catch novamente, e vamos ver o que acontece. Perceba o seguinte, no momento que tiver implementando, essa parte do retorno vai ter esse impacto, se de repente você não tiver o comportamento esperado, fique atento aqui com esse retorno. Deixa eu limpar o log, vou pressionar novamente e soltar, já consumiu ali para ele mesmo e não deixou ninguém pegar, não passou para frente esse evento, até teve um comportamento diferente porque antes ele selecionava mais, e antes ficava na seleção, agora nem faz mais isso, seleciona o suficiente, faz o evento que tem que fazer, a ação, a configuração a mais do listener e já era. Da mesma maneira, se a gente for lá temos os efeitos da maneira esperada. Dessa maneira que trabalhamos com o clique longo. Agora, precisamos colocar o comportamento para remover o aluno, e para isso, a gente tem que remover do nosso dao, então nosso dao vai ficar responsável em fazer essa remoção, então vamos entrar, podemos pegar uma referência no dao que a gente quer remover um aluno a partir da posição, a partir do que a gente tem disponível, porque a gente trabalha com Ids, não faz sentido trabalhar com posição, vamos sempre mandar o aluno de acordo com o ID esperado. Então, deixa eu apagar aqui, e a gente vai fazer da mesma maneira como a gente fez nosso listener, que fazia o clique de item, vamos pegar aqui, vou apertar o ctrl-B que vai direto, pegamos a partir do adapter view, podemos usar o mesmo código, e vamos colocar aqui, para poder indicar que foi o aluno escolhido, a gente manda nosso aluno escolhido, e pedimos para o android studio, a partir do atalho alt-enter, criar esse método para gente, create method, remove, a gente coloca dentro do nosso dao. E agora que temos o método, vou deixar o nome genérico de aluno, e a gente pode começar a fazer nosso código. A gente faz da seguinte maneira, a gente busca o nosso aluno, a partir do método, busca aluno pelo ID, e aqui a gente manda o aluno como referência, ele manda uma nova referência que é o aluno dentro da lista, para poder remover ele, a gente tem o aluno devolvido, pode deixar com esse nome também, e agora a gente pode remover, então para remover é simples, a gente pega nossa listinha, indica que quer remover, poderia mandar vários argumentos, a posição ou o objeto, dado que a gente buscou o objeto dentro do remove ali, a gente pode remover ele, então aluno devolvido vai ser removido. A gente pode lembrar que esse nosso método pode devolver um nulo, então faz todo sentido antes de remover, fazer uma verificação, indicando “O aluno removido, se for diferente de nulo, você aplica a ação de remoção.” Então, com o ctrl-shift-seta para cima, eu coloco dentro do escopo do hífen, e agora colocamos esse comportamento. Podemos testar para ver se funciona da maneira esperada. Vamos ver o que acontece. Shift-F10, aguardar o android studio finalizar e verse funcionou da maneira esperada. Ele abriu para gente bonitinho, tranquilo, e agora vamos pressionar nosso aluno, vou pressionar o Alex. Não acontece nada, mas será que não aconteceu nada, eu vou clicar aqui na Fran, e vou voltar, e olha, ele realmente foi removido, em outras palavras, existem passos a mais que fazem sentido colocar para remover de fato, e agora que vimos isso, a seguir vamos ver como fazer esses passos a mais, preocupações a mais para remover de fato e ter experiência da maneira esperada, porque o que está acontecendo é que só estamos removendo no aluno dao, sendo que na verdade existem outras coisas para serem feitas, e a seguir vamos ver. Até já.
+
+@@2
+Aplicando remoção no DAO
+
+Caso você precise do projeto com todas as alterações realizadas na aula passada, você pode baixá-lo neste link.
+Ajuste o código para que o aluno seja removido no DAO. Para isso, no DAO, implemente o método remove() que recebe um aluno como parâmetro.
+
+Nesta implementação, busque o aluno por meio do seu id e após garantir que ele existe, remova-o com o método remove() da lista de alunos.
+
+Para testar o código, chame o método remove() do DAO dentro do onItemLongClick() enviando o aluno escolhido. Então, faça o clique longo no aluno, entre no formulário e volte.
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/archive/aula-2.zip
+
+
+
+O App deve apresentar o seguinte comportamento:
+
+
+O código para essa implementação ficou da seguinte maneira:
+
+AlunoDAO.java:
+public void remove(Aluno aluno) {
+  Aluno alunoDevolvido = buscaAlunoPeloId(aluno);
+  if(alunoDevolvido != null){
+      alunos.remove(alunoDevolvido);
+  }
+}COPIAR CÓDIGO
+ListaAlunoActivity.java:
+private void configuraLista() {
+    ListView listaDeAlunos = findViewById(R.id.activity_lista_alunos_listview);
+    final List<Aluno> alunos = dao.todos();
+    configuraAdapter(listaDeAlunos, alunos);
+    configuraListenerDeCliquePorItem(listaDeAlunos);
+    listaDeAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int posicao, long id) {
+            Aluno alunoEscolhido = (Aluno) adapterView.getItemAtPosition(posicao);
+            dao.remove(alunoEscolhido);
+            return true;
+        }
+    });
+}COPIAR CÓDIGO
+Agora que aprendemos a remover o aluno no DAO, o próximo passo será a remoção via interface gráfica.
+
+@@03
+Removendo aluno por completo
+
+Conseguimos remover nosso aluno diretamente no dao, mas não é uma experiência tão bacana para o usuário, afinal, para ele descobrir que o usuário foi removido, ele tem que fazer a pressão, o clique longo, entrar no formulário e voltar para a nossa lista para descobrir que o aluno foi removido. Em outras palavras, o ideal é fazer com que o feedback seja apresentado no momento exato que é removido de verdade, quando faz o clique longo, precisamos entender por que isso funciona, quando vamos para o formulário e voltamos para a lista e porque não funciona diretamente no dao. Como vimos quando estava fazendo a implementação do formulário, tivemos problemas de atualização, dado a questão de ciclo de vida, e a gente viu que para atualizar as informações, no momento que voltasse para a lista, tínhamos que usar o estado de resumo, on resume, então, on resume, olha o que fizemos, reconfiguramos a lista, por que fizemos isso? Na reconfiguração da lista, buscamos novamente todos os alunos ali no dao, ou seja, qualquer tipo de atualização que aconteceu ali, uma inserção, edição ou remoção, serão replicadas para nossa lista alunos activity, por isso que chamar novamente se torna viável para atualizar as informações para o usuário, portanto, uma solução inicial que poderíamos pensar é no momento que estou removendo, eu reconfiguro a lista, esse seria um passo inicial a considerar. Vamos fazer o teste e ver o que acontece. Shift-F10, vamos testar com a nova reconfiguração, que é no momento que faz o clique longo, vai remover no dao, e configuramos novamente a listview. Cliquei, pressionei, sumiu, essa é a maneira ideal, e sumiu. Agora sim, em comportamento, na parte visual, temos o comportamento ideal. Então, beleza, conseguimos colocar a feature de remoção, mas será que realmente estamos fazendo os passos ideais? Esse é um momento que quero mostrar para vocês que vai ser muito comum no dia-a-dia e que faz todo o sentido você como desenvolvedor android se conscientizar. Só funcionar, às vezes não é suficiente, porque às vezes você vai estar fazendo passos a mais que não deveria, o que quero dizer com isso, perceba que o que queremos de verdade é atualizar o nosso dataset, nosso conjunto de dados, dentro do adapter, e não buscar novamente nossa listview, não chamar novamente os nossos, aluno dao aqui, tudo bem, não ficar configurando o adapter novamente, e nem mesmo os listeners, essas configurações não precisam ser feitas constantemente, o que quero dizer? Existem outras técnicas que evitam que a gente faça toda essa configuração para atualizar o adapter. Afinal, o adapter é responsável em manter o responsável em manter o conjunto de dados para a listview, e da mesma maneira que tem a responsabilidade em manter, também tem de atualizar quando necessário. Portanto, o que vou fazer é uma técnica na qual vamos otimizar o que fazemos hoje, que é atualizar as informações, ao invés de fazer configurações a mais, vamos trabalhar diretamente com o adapter e fazer com que ele seja responsável por atualizar as informações. Para trabalhar com o adapter, a primeira coisa é ter acesso a ele, a configuração dele isola, não temos como acessar nos outros membros, por isso entramos em configura adapter, com ctrl-B, e faz com que essa instancia que a gente está mandando com o argumento do set adapter, seja um atributo de classe para que todos os membros acessem. Para ser tributo de classe, vamos chamar de adapter mesmo, não tem outro nome a mais que poderíamos colocar a mais que faça tanto sentido assim, e vamos usar para fazer a configuração. O que podemos fazer com nosso adapter? Ao invés de configurar a lista, podemos usar o adapter e usar um dos métodos, temos o próprio remove, se a gente colocar esse remove, indicando o objeto que queremos remover, nosso aluno escolhido, dentro do adapter, vamos ter a capacidade de fazer o comportamento de remoção, sem ter que fazer as configurações novamente. Vamos testar e ver o que acontece. Shift-F10, vamos agora verificar o comportamento e se mantem o esperado para o usuário, e o que a gente quer, que é remover de verdade os alunos. Ele removeu, da mesma maneira, removeu. Se a gente cadastrar o Gui novamente, deve apresentar o Gui e as outras informações não aparecerem. Vejam que a gente tem o mesmo comportamento. A diferença é que não estamos executando passos desnecessários, estamos executando o que precisa, atualização das informações contidas no adapter, como no nosso dao, então, todas as vezes que você fizer uma solução no android, tome cuidado com os passos que você faz. Funcionar não é o suficiente às vezes, precisamos analisar o que a gente fez, verificar se está otimizado o suficiente, e querendo ou não, aplicativos para android funcionam em dispositivos móveis, então quanto mais que a gente deixe nosso código otimizado, e que também facilite a manutenção, melhor. Veja que não foi doloroso, não foi ruim, não estava em high level e foi para low level, a gente fez uma coisa muito simples, foi exatamente o mesmo procedimento, mas estamos chamando de uma maneira ideal, mais inteligente, que evita executar passos que seriam executados de maneira desnecessária. Dado que temos esse feedback de que podemos usar o adapter de maneira mais inteligente, para evitar a execução de passos desnecessários, a seguir vou explorar mais a questão de passos desnecessários que estamos fazendo nesse momento e vamos tentar otimizar nosso código para executar de maneira esperada, fazendo com que os passos sejam executados no momento que for realmente necessário. Então até já.
+
+@@04
+Atualizando lista após remoção
+
+Atualize a lista de alunos logo depois de remover o aluno no DAO. Para isso, extraia a instância do adapter para um atributo da ListaAlunosActivity. Em seguida, logo depois de remover o aluno no DAO chame o método remove() do adapter.
+Execute o App e veja se funciona como o esperado.
+
+O App deve apresentar o seguinte aspecto visual:
+
+
+O código ficou da seguinte maneira:
+
+public class ListaAlunosActivity extends AppCompatActivity {
+
+    public static final String TITULO_APPBAR = "Lista de alunos";
+    private final AlunoDAO dao = new AlunoDAO();
+    private ArrayAdapter<Aluno> adapter;
+
+    private void configuraLista() {
+        ListView listaDeAlunos = findViewById(R.id.activity_lista_alunos_listview);
+        final List<Aluno> alunos = dao.todos();
+        configuraAdapter(listaDeAlunos, alunos);
+        configuraListenerDeCliquePorItem(listaDeAlunos);
+        listaDeAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int posicao, long id) {
+                Aluno alunoEscolhido = (Aluno) adapterView.getItemAtPosition(posicao);
+                dao.remove(alunoEscolhido);
+                adapter.remove(alunoEscolhido);
+                return true;
+            }
+        });
+    }
+
+    private void configuraAdapter(ListView listaDeAlunos, List<Aluno> alunos) {
+        adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                alunos);
+        listaDeAlunos.setAdapter(adapter);
+    }
+
+    // restante do código
+
+}
+
+@@05
+Refatoração com otimização
+
+Agora que vimos que é muito comum existirem passos desnecessários para o nosso código, vamos explorar um pouquinho mais do que a gente está fazendo e ver o que a gente pode estar otimizando aqui, está bom? Então, como a gente pode ver, um dos passos que a gente costuma executar mais de uma vez é justamente todo código contido aqui no on resume, afinal, quando a gente inicializar a nossa lista alunos activity, como também quando a gente vai para o formulário e volta para ela, ele é executado novamente. A gente precisa entender, a gente precisa saber quais desses comportamentos que a gente reexecuta a cada vez que a gente vai para o formulário e volta faz sentido a gente só executar, por exemplo, uma única vez. E, a partir desses conceitos que a gente vai aprender agora, a gente vai reformular o nosso código para que ele fique otimizado o suficiente. Vamos lá. Em relação a essa parte da busca, a gente não precisa fazer várias buscas para poder encontrar a listview que a gente quer, afinal, essa busca que a gente está fazendo vai manter sempre a mesma referência. Portanto, ela precisa ser feita apenas uma única vez. Da mesma maneira, quando a gente está buscando esses nossos alunos, a gente só está buscando eles novamente porque a gente está reconfigurando o nosso adapter e o nosso adapter também pode ser configurado apenas uma única vez. Veja que, também, os listeners não vão ter essa necessidade de fazer essa reconfiguração. Se a gente ver em um todo aqui, todos esses comportamentos que a gente está vendo aqui não precisam ser reexecutados, eles podem ser executados uma única vez, por exemplo, no on create, onde costuma ser executado uma única vez. O que a gente precisa explorar de verdade é o que a gente explorou no momento de remover, é o nosso próprio adapter. Então, vai ser o adapter, por exemplo, que vai ficar contido aqui no nosso on resume e vai simplesmente atualizar as informações que estão dentro dele. Por exemplo, quando a gente tiver uma atualização que foi feita lá no formulário - um aluno novo, certo? - A gente vai pegar o nosso adapter e vai falar: “olha, adapter, teve uma atualização nova. Limpe os dados que você tem e adicione todos os dados agora que estão contidos. Essa é uma solução que a gente pode estar aplicando e que evita toda essa reconfiguração. Agora que a gente entendeu sobre o que faz sentido ser executado e quantas vezes faz sentido ser executado, vamos migrar um pouquinho esse código e ajustar agora com essa refatoração. Vamos mandar esse nosso configuralista porque ele deve ser feito apenas uma única vez dentro do nosso on create. Logo depois que a gente configura o nosso dado, que é o nosso componente que a gente tem aqui, a gente vai fazer a configuração da nossa lista, que configura o adapter, que pega todos os alunos e faz as configurações da maneira esperada. Em seguida, o que a gente vai fazer? A gente, agora, vai notificar no resume que houve essa atualização no adapter, que vai precisar atualizar. Como eu comentei, a gente vai falar para o adapter: “olha, todos os dados que você tem aí, eles já não são válidos porque vai vir alguma coisa nova, tudo bem? Tem essa possibilidade. Então, você vai limpar todos os seus dados”, a gente chama o clear. Logo em seguida, a gente fala: “olha, agora que você limpou todos os seus dados, adicione novamente aqui todos os dados que estão contidos na fonte de dados segura”, que é o nosso dao. Então, a gente vai lá e chama o addAll. Com o addAll, a gente pega o nosso dao e chama o “todos”. Dessa maneira, a gente consegue fazer a configuração da maneira esperada, inclusive, agora que a gente está sempre adicionando, limpando o nosso adapter, e depois adicionando todos os dados, a gente nem precisa fazer essa adição dos dados do adapter quando a gente faz a configuração dele. A gente não precisa, por exemplo, ter que ficar pegando o nosso DAO dentro do nosso código da configuração da lista. A gente pode remover essa referência, não precisamos mandar para a configuração do nosso adapter porque também a configuração do nosso adapter não exige que a gente mande o data 7, a gente pode mandar sim o data 7, tudo bem? A gente pode estar fazendo isso. Aí, a gente coloca esse data 7 no momento que a gente faz o nosso on resume. A gente faz isso. Agora a gente remove esse parâmetro e vai adicionar esses dados exatamente no on resume. O on resume que vai ficar responsável em limpar o adapter com o que ele tem e vai adicionar as informações conforme necessário. Porque, como a gente sabe, o fluxo que a gente tem hoje, a gente entra no formulário, que pode alterar os dados que a gente precisa manter na lista. Dado que tem essa possibilidade, aí sim que faz sentido a gente adicionar de novo. A gente evita de reconfigurar diversas coisas que precisam ser feitas apenas uma única vez, não precisa ser feito mais de uma vez. Vamos executar o nosso código e vamos ver como vai ficar. Agora que a gente fez essa adaptação, que foi uma adaptação um pouquinho até grande, porque antes a gente migrou um pouquinho por causa do nosso fluxo, vamos ver se realmente funciona. A princípio, tudo funcionou, ele adicionou os elementos como eu havia comentado porque ele entrou agora no resume, ele limpou, caso existisse, algum tipo de dado e, depois, ele adicionou. Agora, vamos tentar fazer os comportamentos que a gente esperar. Primeiro, seria o “inserir”, certo? No “inserir”, a gente vai adicionar o Gui. Eu não vou colocar outras informações para ser um teste mais rápido. Ele foi lá e adicionou em nenhum problema. Da mesma maneira, se a gente tentar editar o Gui, vamos ver o que acontece. Ele vem com aquelas informações que a gente colocou primeiro, vamos novamente chamar o Gui Silveira e vamos colocar o telefone por exemplo, vou colocar até o mesmo telefone que eu estou colocando aqui para testar, e aqui eu vou deixar o e-mail do Gui. Então, eu vou salvar e vamos ver o que acontece. Ele foi lá e editou. Por fim, vamos testar a remoção. Remove aqui, beleza, removeu o Alex e removeu a Fran e removendo o Gui Silveira. Se a gente entrar no formulário e voltar, a gente tem exatamente o mesmo comportamento de antes. Qual é a diferença, o que a gente tem de ganho? A diferença, pessoal, é que agora a gente está fazendo um código bem mais inteligente, que faz a configuração necessária apenas uma única vez, porque é apenas uma única vez que ela é necessária, a gente não está fazendo etapas de maneira desnecessária e a gente está conseguindo utilizar o que é comum, realmente, de ser utilizado quando a gente trabalha com adapter views ou qualquer tipo de componente que tem um adapter, que é justamente o componente responsável por manter os dados, que é usar seus métodos, seja o de remover, seja o método de adicionar, limpar os dados, e assim por diante. Todas as vezes que você estiver trabalhando com adapter view ou qualquer componente que utilize o adapter, fique atento e utilize o adapter para fazer as operações comuns, que são conhecidas como CRUD, que é o create, o read, o update e o delete, que, traduzindo, ficaria: criação, atualização, remoção e também a alteração. Quando tem esses tipos de operação, pode usar à vontade o adapter, esse é o recomendado para poder manter e atualizar os dados da maneira esperada. Agora que a gente fez essas modificações, faz todo o sentido a gente aplicar algumas refatorações, afinal, não é uma refatoração tão grande. Já vamos aproveitar esse momento para aplicar essas refatorações. Uma delas que eu posso estar aplicando é justamente extrair todo esse código do nosso listener, da mesma maneira como a gente fez no clique normal. Então, ficaria... vou até pegar um nome similar colocando apenas a palavra “longo” para indicar que é o de pressionar. Configura o listener de clique longo por item. Agora, a gente deixa bem descritivo o que o método está fazendo. Dentro dele, também a gente pode extrair outros métodos, que seria, por exemplo, o remove. Então, a gente deixa esse remove, por exemplo, para o nosso activity, indicando que esse remove aqui vai remover um aluno, que indica também que vai remover o aluno da lista. Aqui, a gente pode até já deixar um nome genérico ao invés de ser “aluno escolhido” para apenas “aluno” e ele já deixa aqui bonitinho para a gente. Ele conseguiu fazer essa extração e agora a gente só precisa fazer uma extração aqui no nosso on resume, afinal, a gente tem um motivo para estar fazendo esses dois passos, que é limpeza e adição de todos os alunos, que é justamente atualização dos alunos. Então, atualiza alunos, é isso que a gente está fazendo. Agora, pessoal, vejam que o nosso código ficou bem mais simples em relação ao fluxo que ele está fazendo. A gente executa só uma única vez a configuração da lista que vai buscar o nosso listview, vai configurar o seu adapter, vai fazer configuração do seu listener tanto de clique quanto de clique longo e, dentro desses métodos, a gente vai ter os seus comportamentos específicos. Então, de clique por item, a gente já faz a abertura do formulário para editar, aqui no clique longo a gente remove o aluno que foi selecionado e assim por diante. Então, agora ficou muito mais simples, inclusive até no resume a gente atualiza os alunos. Agora a gente realmente tem um código que descreve o fluxo que é esperado com base no estado do ciclo de vida e também com base no que a gente espera, isso de uma maneira mais inteligente, sem executar passos desnecessários. Então, era exatamente isso que eu queria passar para vocês, que vai ser muito comum no seu dia-a-dia. Às vezes, você vai escrever um código que, aparentemente, já seja suficiente, já funciona, já mostra os comportamentos esperados, só que bem ali por debaixo dos panos, em algum momento na sua vida, ele vai te pegar de surpresa porque ele vai apresentar de repente uma lentidão, um possível bug, porque você não teve os cuidados da maneira que deveria ter. Era isso que eu queria passar, até mais.
+
+@@06
+Analisando e refatorando código
+
+Refatore o código da lista de alunos visando evitar chamadas desnecessárias, como por exemplo a chamada de configuração da ListView mais de uma vez. Migre todo o código que precisa ser executado uma única vez para o onCreate().
+Para manter a atualização de alunos na ListaAlunosActivity funcionando, utilize o adapter, fazendo a limpeza dos seus dados e buscando os novos dados contidos no ListView.
+
+Lembre-se que o adapter não precisa da lista no construtor para que funcione, ela pode ser adicionada depois.
+Após essa modificação, aplique técnicas de refatoração em blocos de código soltos, como é o caso dos códigos que utilizam o DAO e o adapter juntos.
+
+Por fim, teste o App e veja se ainda funciona da maneira esperada.
+
+O App ainda mantém o mesmo comportamento, a diferença é que agora utilizamos o adapter ao invés de reconfigurar a lista de alunos cada vez que se faz necessário.
+Essa refatoração teve mudanças pontuais no código, sendo assim, deixo o commit que detalha os pontos exatos das mudanças).
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/commit/d436773f2dd6a582015993c3b5a008204343a61f
+
+@@07
+Sobre o uso do Adapter
+
+Durante esta aula, resolvemos utilizar o Adapter para modificar o dataset (dados do adapter). Por quais motivos escolhemos essa abordagem?
+
+
+Para evitar a execução desnecessária de passos que podem ser executados apenas uma vez.
+ 
+Isso mesmo! Com o uso do adapter, é possível fazer a busca, inicialização de adapter e configuração de listeners para AdapterViews apenas uma única vez.
+Alternativa correta
+Para permitir que a configuração da lista de alunos seja feita no estado de criação da Activity.
+ 
+Exatamente! Ao considerar o uso do adapter, não precisamos criar um novo adapter para atualizar o dataset, dessa forma, podemos configurar na criação da Activity.
+Alternativa correta
+Para permitir a atualização da lista de alunos sem apresentar dados inconsistentes.
+ 
+Alternativa correta
+Para evitar referências nulas ao atualizar a lista de alunos cada vez que entra no onResume().
+
+@@08
+O que aprendemos?
+
+Nesta aula, aprendemos a:
+Implementar a feature de remoção em AdapterViews;
+Analisar e refatorar códigos que não precisam ser executados mais de uma vez;
+Utilizar a referência do Adapter para manipular os dados do AdapterView
