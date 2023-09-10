@@ -686,3 +686,211 @@ Nesta aula, aprendemos a:
 Implementar a feature de remoção em AdapterViews;
 Analisar e refatorar códigos que não precisam ser executados mais de uma vez;
 Utilizar a referência do Adapter para manipular os dados do AdapterView
+
+#### 10/09/2023
+
+@04-Aplicando menus do Android
+
+@@01
+Criando menu de contexto na ListView
+
+Implementamos o CRUD no nosso aplicativo, porém, o comportamento de remoção de alunos é um comportamento que temos que dar um pouco mais de atenção, pensando na melhor experiência para nosso usuário, pelo seguinte fato, hoje como que a gente faz para remoer um aluno, a gente vem aqui, clica, segura, que é a pressão, e ele remove. Mas se o usuário estiver explorando nosso aplicativo, não tem a mínima ideia como funciona e tem curiosidade, ele pode cometer um erro, ou uma ação indesejada, nem um erro, porque estamos colocando a culpa no usuário se a gente fez o produto, ele pode ter um comportamento inesperado. Perder dado valioso dele, porque o aplicativo não mostrou para o usuário que ele iria remover o dado, ele simplesmente removeu. O que quero dizer é que ações que são perigosas, grande impacto para as informações de usuário, precisamos colocar uma camada a mais que vai mostrar para o usuário o que ele está prestes a fazer, então, ao invés de ser objetivo e remover, precisamos de alguma maneira avisar o usuário que é algo perigoso e que ele tem chance de perder os dados ou se é isso mesmo que ele quer. E para isso temos diversas opções usadas em Android. O que é bem comum é o que costumamos fazer em sistemas operacionais que utilizamos em computadores, Windows, Linux, ou Mac. Justamente o famoso botão direito, então se a gente vem aqui no projeto, nesse diretório app, e apertar o botão direito, a gente tem um monte de menus de possibilidades que podemos fazer, esse menu é conhecido como menu de contexto e no android também temos acesso a esse tipo de menu, e é por meio dele que podemos explorar essa feature para melhorar a experiência do usuário, vamos então implementar. Como que podemos implementar um menu de contexto quando tentarmos fazer essa ação de pressionar e tentar remover o aluno antes mesmo de fazer a remoção? Para isso, vamos no activity, lista alunos activity, vou estender nosso código e a partir dela podemos começar na criação. A criação de menu de contexto é muito similar quando queremos modificar um comportamento do ciclo de vida, a gente vai ter que sobrescrever o método responsável pela criação de menu de contexto responsável pela activity, o famoso oncreate context menu, a partir dele, vamos ter a possibilidade de adicionar menus de contexto à nossa activity, para isso podemos usar esse parâmetro que é nosso contexto menu, a partir do object menu, e adicionar wedge, um método que tem sobrecargas, entre as opções, a mais objetiva para o que precisamos é a que pode ser uma string, que aqui só vamos colocar o nome do menu que esperamos, o remove, ou remover, então vamos deixar como remover, que a gente pode estar utilizando da nossa língua portuguesa. Bacana, a gente criou o menu, mas apenas criar não é o suficiente, porque ele deve ser acionado de uma ação de alguma view, da mesma forma que a gente seta um listener, a gente precisa setar esse menu de contexto a uma view, para isso temos o método da própria activity, que é o register for contextu menu, que vai esperar que envie como argumento uma view dentro do nosso layout, então a gente podia registrar nosso float acton button ou a listview. Logo, vamos pegar esse register for contexto menu que está aqui no oncreate, vamos entrar no configura lista, que é onde a gente busca o listview, depois o adapter e os listeners, e vamos registrar a lista, indicar que a lista vai ter um registro de um context menu. Você pode estar pensando, a listview é adapter view e vimos que teve problemas quando tentamos colocar listener direto nela, ela tem suas views filhas, e não deixou fazer implementação de um listener de clique diretamente nela. A gente vai ter esse problema? Nesse caso não, porque o register for context menu está configurado suficiente para que quando receba uma viewgroup ele seja capaz de colocar nosso contexto menu para cada um dos elementos filhos, caso da listview, cada item faz parte de um filho seu. Então, ele está preparado para isso, a documentação garante para gente. Sendo assim, podemos fazer um teste, shift-F10, vamos abrir nosso emulador, e ver o que acontece após a execução do android estúdio. Está finalizando, abrindo nosso aplicativo, e se a gente tentar remover um aluno, ainda vai remover e não vai apresentar nenhum tipo de feedback. Por que isso acontece? Porque o context menu é acionado quando fazemos a pressão, a partir de um clique longo, mas temos implementação de clique longo, essa que é meio que guloso, só pega o evento para ele, não passa para as demais entidades que também tratam desse evento, e o contexto menu faz parte dessas entidades que vai assumir esse evento. Para a gente conseguir acionar, é deixando como falso e passando para frente. Shift-F10, vamos testar, ver se agora pelo menos aparece e a gente conclui que é dessa maneira que precisa ser feito. Está finalizando a execução, vamos pressionar novamente, ele remove. Mas ao mesmo tempo, apresenta o menu de contexto. Uma curiosidade, bacana, o contexto menu acaba sendo o guloso da vez, ele não faz com que o clique normal pegue o evento, não passa para frente, ele pega para ele e consome o clique longo, que seria o clique normal. Agora, conseguimos entender como funciona o menu de contexto, e dado que a gente só quer remover após clicar em remover de verdade, não precisamos manter esse comportamento da configuração do listener de clique longo por item, porque não vamos mais fazer a execução de remoção de cara, vamos esperar o usuário decidir o que ele quer, e conforme ele decidir, executamos no código, então o primeiro passo vai ser remover o comportamento não desejado, estou removendo aqui, bacana.
+
+@@02
+Adicionando o menu de contexto
+
+Caso você precise do projeto com todas as alterações realizadas na aula passada, você pode baixá-lo neste link.
+Crie um menu de contexto que apresente a opção de remover o aluno. Para isso, dentro da ListaAlunosActivity sobrescreva o método onCreateContextMenu(), então, com o parâmetro ContextMenu, chame o método add(), enviando o título "Remover".
+
+Registre o menu para a ListView por meio do método registerForContextMenu() logo depois de realizar todas as configurações.
+
+Por fim, remova todo o código de configuração do listener de clique longo da ListView.
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/archive/aula-3.zip
+
+O App deve apresentar o seguinte aspecto visual:
+
+
+Em código tivemos o seguinte resultado:
+
+public class ListaAlunosActivity extends AppCompatActivity {
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add("Remover");
+    }
+
+    private void configuraLista() {
+        ListView listaDeAlunos = findViewById(R.id.activity_lista_alunos_listview);
+        configuraAdapter(listaDeAlunos);
+        configuraListenerDeCliquePorItem(listaDeAlunos);
+        registerForContextMenu(listaDeAlunos);
+    }
+
+    // restante do código
+
+}COPIAR CÓDIGO
+Lembre-se de remover o código que configura o listener para clique longo.
+
+@@03
+Implementando listener no menu de contexto
+
+Agora que a gente removeu esse comportamento, a gente precisa aplicar um certo tipo de listener, aplicar um comportamento a mais quando a gente seleciona o menu. E como é que a gente faz isso? Se a gente pensar no que a gente fez até o momento, a gente pensaria em fazer um setListeners, certo? Só que, no menu de contexto, a gente também vai ter um método, que é da própria activity, que é responsável em pegar todos os menu de contexto que foram acionados. Então, se você acionar um menu de contexto qualquer, ele vai chamar esse método. É dessa maneira que a gente acaba colocando um listener nos nossos menus de contexto, que é a partir do “on item” ou “on... sempre confundo, é “on context”, agora sim: “on context item selected”. Quando a gente coloca esse “on context item selected”, estamos indicando que qualquer tipo de menu de contexto que for selecionado, clicado, da maneira que você preferir chamar, ele vai chamar esse método e a gente pode estar executando da maneira esperada. Nesse caso, o que a gente quer fazer, pessoal? A gente quer pegar as informações do menu que vão indicar exatamente o aluno que foi selecionado e que ele realmente quer remover. Então, a partir dessas informações, a gente precisa remover esse aluno. Só que como que a gente vai fazer isso? Antes, aqui nos nosso métodos, que a gente tinha nos nossos listeners, a gente tinha acesso, por exemplo, a um adapterview, a gente tinha acesso a uma posição e aqui a gente só tem acesso ao menu item, que é justamente o que representa de menu, que é aquele menuzinho lá do menu de contexto. O que a gente pode estar utilizando aqui para poder pegar essas informações? Para isso, a gente tem mais um objeto que é conhecido como menu info e esse menu info vai ter a capacidade de nos dar mais informações. Se a gente chegar aqui e colocar o item e pedir o menu info, a gente vai ter mais informações capazes de nos ajudar. Então, get menu info. Só que tem um detalhe: o menu info, aqui para o padrão, ele não dá tanta informação que a gente precisa, sendo que a gente precisa de uma informação do adapter. Para isso, a equipe do android criou um menu info específico para os adapters. Então, se a gente chegar aqui e tentar fazer uma conversão como um cast do adapterview, adapter context menu, e realmente usar esse menu info agora, a gente vai ter acesso a essas informações que a gente precisa. Como eu comentei: a gente precisa converter esse menu info genérico para esse menu info específico. É claro, isso só vai funcionar se realmente a sua view que você registrou for uma adapterview, caso contrário, você não vai ter esse funcionamento, vai dar ali uma exception. Então, esse é um fator importante. A gente já está garantindo que isso é verdade, a gente está assumindo para o nosso código, para o android que isso é verdade e, por isso, agora, a gente vai ter acesso às informações contidas no adapterview quando a gente se relaciona com o context menu. Quais seriam as informações que a gente pode ter acesso aqui, pessoal? Dentre elas, por exemplo, a gente pode pegar a posição do nosso elemento, que é uma informação importante porque, a partir da posição, a gente pode, por exemplo, o nosso adapter e pedir um aluno. Então, a gente pode falar para ele falar o seguinte: get... a gente tem o “get item” porque “item” é justamente o item a partir de uma posição que vai ser devolvido. A gente pega o nosso menu info e fala: “pega a posição do item que foi tocado a partir desse menu de contexto”, ele vai lá e nos devolve aqui um aluno - “aluno escolhido”. Agora que a gente tem o aluno escolhido, basta a gente chamar o nosso remove. Então, “aluno escolhido” e vai lá e remove. Então, é basicamente essa maneira que a gente trabalha com os nossos menus de contexto. A gente acaba tendo o nosso listener, que pega qualquer tipo de menu de contexto, dado que a gente está precisando da informação do adapterview, a gente consegue pegar o menu info e converter para o menu info do adapterview; e, depois, a gente pega a posição, que é o que a gente precisa, a posição do elemento que foi selecionado, que foi que usou o menu de contexto, e podemos explorar o nosso adapter para recuperar esse aluno, e depois fazer o que quiser. Nesse caso, a gente só quer remover. Então, agora que a gente fez todos esses passos, vamos testar novamente. Shift f10, lembrando que agora a gente não vai ter mais o comportamento do nosso clique longo porque a gente removeu, então remova aí também quando você fizer, agora a gente não tem mais, e vamos testar para ver o que acontece. Agora, eu vou clicar aqui no aluno, ele vai aparecer o menu de contexto. O primeiro teste que eu vou fazer é clicando em nada para ver o que acontece. Não aconteceu nada. É o esperado. Agora, eu vou clicar aqui e vou clicar em remover. Olha só, ele foi lá e removeu. Percebe que dessa maneira a gente aumenta a flexibilidade, a gente aumenta a segurança que o usuário vai ter no nosso aplicativo, ele vai ter mais segurança do que ele está fazendo, ele não vai ficar preocupado em perder as suas informações, que é uma coisa horrível, é uma experiência que ninguém precisa ter, não faz sentido alguém ter medo de usar o nosso aplicativo, ele tem que ter consciência, ele tem que ter a segurança de que o que ele está fazendo é muito bem claro, é muito bem definido. Por isso que, quando tiver features mais impactantes, mais perigosas, você precisa dar esse cuidado a mais, essa atenção a mais ao usuário. Se a gente entrar aqui no formulário, voltar para cá para ver se não deu algum tipo de bug, a gente percebe que funcionou. Se tentar remover a Fran, vai lá e funciona. Agora sim, a gente conseguiu melhorar um pouco mais a experiência do nosso usuário em relação a como ele mexe no nosso aplicativo. Até já.
+
+@@04
+Aplicando listener no menu de contexto
+
+Adicione o comportamento que remove o aluno da lista no listener do menu de contexto. Para isso, sobrescreva o método onContextItemSelected(). Dentro dele, busque o aluno que foi tocado a partir do parâmetro MenuItem, com ele é possível acessar o MenuInfo por meio do método getMenuInfo().
+Considerando que as informações do menu está relacionado ao AdapterView, converta o MenuInfo via cast para AdapterView.AdapterContextMenuInfo.
+
+Então, com essa nova referência acesse a posição do elemento a partir do atributo position, e então, pegue o aluno a partir do método getItem() do adapter.
+
+Por fim, chame o método remove() enviando o aluno que foi selecionado. Teste o App e veja se a remoção funciona a partir do menu de contexto.
+
+O App deve apresentar o seguinte aspecto visual:
+
+
+Em código temos os seguinte resultado:
+
+public class ListaAlunosActivity extends AppCompatActivity {
+
+  @Override
+  public boolean onContextItemSelected(MenuItem item) {
+       AdapterView.AdapterContextMenuInfo menuInfo =
+               (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+       Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
+       remove(alunoEscolhido);
+       return super.onContextItemSelected(item);
+   }
+
+   // restante do código
+
+}COPIAR CÓDIGO
+Agora o App remove os alunos de maneira adequada.
+
+@@05
+Criando o menu via arquivo XML
+
+Agora que implementamos o primeiro menu de contexto, vou aproveitar o momento para falar sobre boas práticas e cuidados que precisamos ter nesse tipo de solução, dentre essas possibilidades, um dos primeiros passos que precisamos verificar é em relação ao que a gente fazia com o layout, a gente criava o layout via código java de maneira programática e depois migramos para uma solução na qual deixamos o layout num arquivo estático para dividir a responsabilidade de criação e utilização na activity, em menus também vamos ter o mesmo comportamento, ao invés de criar o menu de maneira programática, de repente é um menu complexo, o código vai ficar complexo, a gente joga toda a complexidade para o arquivo estático, fixo, e assim reutilizamos o arquivo, então agora a gente vai migrar a solução para um arquivo estático. Vamos lá. Para isso, vamos no nosso projeto, no diretório res, só que agora não tem um diretório destinado a menus, da mesma maneira como não tinha para layout, ou seja, vamos criar um diretório do android que vai ficar destinado a menus, para isso a gente vem e usa o alt insert, e usamos a opção android source directory, e dentro dela, temos a opção resource type que fala o tipo de diretório que a gente está querendo criar, vimos que tínhamos o de layout e também temos o de menu, então a gente toca no de menu, percebemos que ele sugere o nome menu, vamos mantê-lo e clicar em ok. Agora sim temos nosso diretório. Para criar nosso menu, utilizamos alt insert de novo e a opção que ele dá é menu resource file, que ele vai criar um arquivo de menu com template esperado para menus, aqui vamos colocar o nome de arquivo, podemos usar a mesma técnica para layouts, usando o nome de activity, fica activity lista alunos, e como sufixo a gente deixa menu, que a gente já entende que o arquivo é destinado a menu. Agora que temos o menu, perceba que no código fonte ele cria a DSL, usando o elemento chamado de Menu. Se a gente vem no editor visual, vamos ter um comportamento muito similar como tínhamos do layout. Sendo assim, vamos utilizar o editor visual para ver o feedback que a gente tem, e depois vemos o código fonte em xml que foi gerado. Nessa parte do editor visual temos as paletas com as opções disponíveis, e queremos adicionar um menuzinho, o item, para isso, podemos escolher a opção menu item, clicar, segurar, arrastar, e soltar dentro do nosso preview, e ele mostra que adicionou um menu. Perceba que ele mostra que adicionou um menu na app bar, esse vai ser o comportamento comum, afinal como comentei, menus existem de sobra no android, e aqui o que estamos usando é o de contexto, aqui é o normal que não tem nome especifico, apensa menu que vai estar mantido na nossa app bar, e por isso esse é o padrão a ser mantido, mas nada impede de usar o menu dentro de um menu de contexto e por isso que não tem nenhum tipo de problema. Beleza então, ele está mostrando o que vamos ter no nosso menu, e vamos ter a capacidade de editar o menu também, com as possíveis opções que ele nos disponibiliza, dentre elas a mais importante de todas, que ele precisa ter um título, que esse layout que a gente está criando para os nossos menus, ele funcione. Ou seja, se a gente chegar no title, que é o atributo de menu, e apagar, ele vai reclamar falando que a gente precisa ter um título específico para o menu, então todas as vezes que você for criar um menu dentro do arquivo estático, sempre adicione um título, ele vai sempre reclamar. Então, vamos colocar nosso título, que a gente espera, que é o remover. Agora, conseguimos criar nosso menu, é bem simples. Se a gente vê nosso código fonte, perceba que deixamos da maneira esperada, só colocando o item dentro do componente menu, e temos a mesma ideia de nível de hierarquia, o menu seria o elemento raiz. Bacana, só para vocês verem, se a gente não tiver título, vai sempre reclamar. Esse é o primeiro detalhe e o único que temos que ter preocupação ao criar o menu. Agora que temos o menu, precisamos fazer exatamente como fazíamos com o arquivo de layout, precisamos de alguma maneira pegar o arquivo de menu e fazer com que ele seja vinculado à activity, nesse caso, a activity usa uma técnica muito comum dentro do android, conhecida como técnica de inflar, o que isso significa? Significa que ele vai pegar ali o nosso arquivo estático, o que a gente tem nos nossos resources, e transformar esse arquivo em objeto de menu, por isso inflar. Esse é o procedimento de inflar. Mas como podemos fazer esse procedimento dentro do android, dentro da nossa activity? Para isso, temos um inflador, de menus, e a gente pode pegar ele, a partir do método getmenuinflator, então esse vai ser o cara que vai ficar responsável por inflar menus, ele utiliza um método chamado de inflate, que vai receber o arquivo estático de menu, e o menu que ele vai atrelar esse processo de inflar, então a gente vai colocar nosso menu aqui, nosso arquivo de menu que a gente criou agora e vincular ao menu de contexto, porque como vimos, não existe só o menu de contexto dentro do activity, pode ter outros menus, então a gente vincula ao esperado que é o menu de contexto recebido via argumento. Então, agora, conseguimos fazer o processo de inflar, e espera-se que no momento de executar, apareça o menu que a gente criou lá. Então, agora vou executar para gente ver, shift-F10, e vamos ver o que acontece. Deixa eu abrir nosso emulador, está conseguindo carregar sem nenhum problema. Agora vou clicar, segurar, ele mostra o menu para gente, remover, ele foi lá e removeu sem nenhum problema. Agora, pessoal, vamos só editar esse arquivo para ver se funciona, se está refletindo o conteúdo que tem no arquivo estático, então vou dar um ctrl-B e adicionar um novo menu, agora vou adicionar um novo menu a partir do item usando código fonte, item eu coloco um title, e vou colocar como teste só para ver o novo item, e ele mostra novamente como fica, está mostrando para gente. Vou executar aqui e vamos ver o que acontece. O que deve acontecer é que quando a gente clicar, ele vai mostrar todas as opções disponíveis a partir do menu que criamos. Ele vai lá e aparece, então temos aqui o remover e o teste.
+
+@@06
+Criando menu de contexto via arquivo estático
+
+Faça com que o menu seja criado a partir de um arquivo estático contido no diretório res.
+Para isso, primeiro crie um diretório do Android com o nome menu. Então crie um arquivo XML de menu com o nome activity_lista_alunos_menu.
+
+Adicione um menu com o título "Remover" e com um id. Você pode adicionar o menu via editor visual ou código XML. Lembre-se que no editor o item é chamado de Menu Item e no XML apenas <item>.
+
+O id pode usar o mesmo padrão que utilizamos nas views do layout estático.
+Dentro do onCreateContextMenu(), ao invés de adicionar o menu manualmente, faça o processo de inflar menu por meio do método inflate() do MenuInflater().
+
+Para acessar o MenuInflater, você pode usar o método da Activity getMenuInflater().
+Teste o App e veja se funciona como esperado.
+
+Visualização de menus no AS 4.1
+A partir do AS 4.1 além do arquivo de layout, o arquivo de menu também disponibiliza abas novas:
+
+Code: Código fonte do menu
+Split: Código fonte do menu e preview
+Fique à vontade para editar o menu com a aba de sua preferência.
+
+O App deve apresentar o mesmo aspecto visual, a diferença é feita na estrutura do projeto e no código, segue abaixo a nova estrutura do diretório res:
+res
+├── drawable
+├── layout
+├── menu
+├── mipmap
+└── valuesCOPIAR CÓDIGO
+Um arquivo de menu exclusivo para o menu da ListaAlunosActivity:
+
+activity_lista_alunos_menu.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/activity_lista_alunos_menu_remover"
+        android:title="Remover" />
+</menu>COPIAR CÓDIGO
+Então ficamos com a seguinte implementação na Activity:
+
+ListaAlunosActivity.java:
+public class ListaAlunosActivity extends AppCompatActivity {
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater()
+                .inflate(R.menu.activity_lista_alunos_menu, menu);
+    }
+
+    // restante do código
+
+}
+
+@@07
+Adicionando filtro no listener de menus
+
+Agora um outro detalhe que é o que eu vou mostrar para vocês logo a seguir é o seguinte: o que é que se espera quando a gente clica aqui nesse teste? A gente não quer que acontece nada, afinal a gente não configurou nada para esse teste, mas vamos ver o que acontece, clicando aqui ele foi lá e removeu, porque é que ele removeu, pessoal? É justamente por aquele detalhe que eu comentei com vocês, quando a gente implementa aqui um menu e utiliza aqui esse listener do menu, que é justamente é o método onContextItemSelected todos os menus de contexto, nesse caso aqui, eles vão acionar esse método, ou seja, ao invés de colocar uma ação genérica para todo mundo, a gente só pode colocar essa execução de remover quando a gente tiver certeza que foi o menu de remover que foi tocado, justamente pelo fato de que qualquer menu que for acionado a partir do menu de contexto ele vai entrar aqui dentro desse método. Então essa é a outra boa prática que a gente precisa ter que também reflete ao cuidado que a gente precisa ter. Então se você vai colocar um comportamento dentro de um listener do menu você tem que fazer algum tipo de checagem, alguma verificação para garantir que o menu que foi tocado é realmente o que você espera, está bom? Então agora a gente vai trabalhar em cima disso. Como a gente pode saber se foi exatamente o menu de remover que foi tocado aqui nesse caso, certo? Para isso a gente vai conseguir verificar a partir do nosso menu item, porque é ele que representa o menu que foi tocado, então se a gente usar esse objeto a gente percebe que a gente tem diversos métodos para poder pegar alguma informação dele, dentre elas a gente tem, por exemplo, o getTitle que vai ter exatamente o título que a gente colocou aqui no nosso menu, tudo bem, então seria o de remover. Então uma das possibilidades seria o seguinte: a gente pegaria esse título do nosso menu, certo? Então título do menu e verificaria se ele bate com o menu que a gente espera, então, por exemplo, o título do menu eu vou colocar equals porque a gente está lidando com string, é uma referência, certo, é um objeto, eu vou colocar equals remover. Então a gente está verificando se ele bate com o remover, e se isso for verdade aí sim a gente faz todo o código de remoção aqui do nosso aluno, certo? É isso que a gente espera. Agora vamos testar e ver o que acontece, agora que a gente conseguiu fazer esse filtro, agora que a gente só vai executar essa remoção apenas quando a gente tiver certeza que é o menu de remover e não qualquer outro menu a gente vai ver se realmente atende esse comportamento. Então o de remover ele foi lá e funcionou, agora o de teste vamos ver, ele vai lá e não remove, está bom? Então é dessa maneira que a gente acaba trabalhando com menus, então vai ser muito comum você ter diversos menus que vai ter diversos comportamentos diferentes, e para você delegar o comportamento esperado é fazendo esse tipo de filtro, é você colocando o if, de repente o sweet case, da maneira que você preferir, está bom? Aí é claro, pessoal, a gente não vai ficar lidando com strings, afinal a gente tem ali poder do nosso arquivo de layout e a gente sabe que a gente tem os IDs, então a gente pode estar usando aqui IDs e é o recomendado de ser usado ao invés de ter que estar usando aqui um texto, afinal um texto, uma string ela pode estar mudando a qualquer momento, de repente hoje a gente coloca como remover, mas o nosso cliente ele espera que seja deletar. A gente vai ter que se preocupar tanto aqui no nosso if como também aqui no nosso título remover aqui que está dentro do nosso arquivo de layout, layout não, de menu, costumo falar layout porque ele está dentro do arquivo de estático. Então sendo assim a gente vai colocar agora IDs para os nossos menus, então eu vou chegar aqui no nosso menu e da mesma maneira como a gente faz em uma view, a gente coloca o ID, o @ID e vamos usar aqui a técnica para adicionar os nossos IDs, que vai ser o activity, mesma técnica do nome, activity lista alunos menu e aqui eu vou colocar remover, está bom. Então quando a gente coloca esse ID a gente já vai ter a capacidade agora de, ao invés de usar aqui o nosso título, a gente vai pegar aqui do nosso item o ID, então getItemID, então quando a gente pega aqui o ID a gente vai ter a capacidade de fazer aquela comparação, podemos até chamar de ItemID mesmo, não tem nenhum problema. E não vamos mais usar aqui a referência via string e sim a referência via ID do Android, que a gente vai verificar: olha, o ItemID ele bate com o R.ID activity menu remover? Sim, ele bate, se ele bater aí ele vai lá e entra aqui no nosso código, se não ele não faz nada. Aí podemos tirar esse código aqui que pegava aqui o título e agora sim a gente vai fazer de uma maneira mais adequada, que evita os possíveis problemas aí existentes. Vamos só executar, ver como é que fica aqui, se ele realmente está funcionando, tudo que você modificar sempre vai executando, testando e ver se ele bate com o esperado está bom, e aí se tudo tiver certo a gente já pode prosseguir com o restante, está bom? Então vamos só verificar aqui, bacana, ele está funcionando e aqui ele está aparecendo o menu, vamos tocar no remover, funcionou, vamos tocar no teste ele não funcionou, que é o que a gente espera. Então agora sim a gente tem um comportamento esperado e agora que a gente conseguiu fazer isso a gente nem precisa mais manter aqui o nosso teste. Então basicamente eram esses os detalhes que eu queria passar para vocês em relação a implementação de menus, a gente tem até mesmo o name space de app aqui que a gente nem usa, podemos apagar, não em nenhum problema, ctrl para ele poder formatar aqui o nosso código layout e basicamente é isso, pessoal. Então sempre que você for usar um menu de contexto sempre fica atento com o detalhe de você fazer o inflate, que é o processo de inflar menus a partir de um arquivo estático, de você colocar um filtro dentro do seu listener de menus, que no caso seria o OnContextItemSelected para o menu de contexto, e aí depois que você identifica isso você vai lá e executa conforme o menu que foi selecionado, está bom? Então sempre fique atento com isso. Até mais.
+
+@@08
+Aplicando filtro no listener do menu de contexto
+
+Aplique um filtro no menu de contexto usando o id como referência. Para isso, no onContextItemSelected(), adicione um if que verifica se o id do item é o mesmo que foi configurado no arquivo estático, então, dentro do escopo do if, adicione o código de remoção para que seja executado somente quando o menu de remover for tocado.
+Você pode usar o id do menu como uma referência para saber que ele foi tocado.
+Após implementação, teste o App e veja se o menu ainda funciona como esperado.
+
+Uma abordagem de teste bacana, é adicionar mais um menu no arquivo estático e verificar se ao ser tocado ele não executa o comportamento de remoção.
+
+Não houve mudanças visuais, porém o código do listener ficou da seguinte maneira:
+ListaAlunosActivity.java:
+public class ListaAlunosActivity extends AppCompatActivity {
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        int itemId = item.getItemId();
+        if(itemId == R.id.activity_lista_alunos_menu_remover){
+            AdapterView.AdapterContextMenuInfo menuInfo =
+                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            Aluno alunoEscolhido = adapter.getItem(menuInfo.position);
+            remove(alunoEscolhido);
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    // restante do código
+
+}COPIAR CÓDIGO
+Com esse ajuste garantimos que apenas o item "Remover" realiza a ação que remove o aluno de vez.
+
+@@09
+Sobre o uso de filtros para menu
+
+Na implementação do listener para o menu de remoção, utilizamos o filtro... Por qual motivo consideramos essa abordagem?
+
+
+Devido à migração para a arquivo estático, o App quebra sem o filtro.
+ 
+Seja via código Java ou arquivo XML, o menu tem o mesmo comportamento, portanto, esse não é o motivo para considerar o filtro.
+Alternativa correta
+Para compartilhar o mesmo comportamento entre as opções do menu de contexto.
+ 
+Muito pelo contrário! A ideia de usar um filtro é evitar que um comportamento que deve ser exclusivo de um menu seja executado quando outro menu for acionado.
+Alternativa correta
+Porque o Android Framework quebra e sugere a implementação do filtro.
+ 
+Dependendo do que for implementado, pode quebrar o App, porém, esse não é o real motivo para considerarmos o filtro para menus.
+Alternativa correta
+Para que seja executada a ação esperada para o menu filtrado.
+ 
+Exato! Com essa abordagem evitamos que um comportamento seja executado quando outros menus dentro do menu de contexto forem acionados.
+
+@@10
+O que aprendemos?
+
+Nesta aula, aprendemos a:
+Implementar menu de contexto;
+Criar menus via arquivo estático;
+Realizar o processo de inflar menu;
+Configurar listener de menu adequadamente.

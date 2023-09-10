@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Agenda</string>
+    <string name="add_new_student">Add new student</string>
+    <string name="button_save">Save</string>
+    <string name="activity_lista_aluno_menu_remover">Remover</string>
+</resources>
