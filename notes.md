@@ -906,7 +906,6 @@ Continuando com assuntos sobre melhoria de experiência de nosso usuário em rel
 
 @@02
 Implementando o ScrollView no layout
-PRÓXIMA ATIVIDADE
 
 Caso você precise do projeto com todas as alterações realizadas na aula passada, você pode baixá-lo neste link.
 Modifique o layout do formulário para que ele suporte a ação de rolagem. Para isso, envolva todo o layout dentro do ScrollView.
@@ -994,7 +993,6 @@ Para finalizar o assunto de experiência de usuário em relação a usabilidade 
 
 @@04
 Salvando aluno via menu de opções
-PRÓXIMA ATIVIDADE
 
 Para evitar que o usuário tenha que realizar a ação de scroll para salvar o aluno, modifique o formulário para que tenha um menu na App Bar que vai ter o comportamento de salvar o aluno.
 Sendo assim, crie um menu de opções sobrescrevendo o método onCreateOptionsMenu(). A criação do menu de opções é da mesma maneira que o menu de contexto, portanto, crie o arquivo estático de menu com um item contendo um id e um título.
@@ -1043,7 +1041,6 @@ A seguir vamos refatorar o projeto, fazendo com que o menu seja um ícone e o bo
 
 @@05
 Adicionando o ícone no menu
-PRÓXIMA ATIVIDADE
 
 Adicione o ícone no menu de salvar o aluno. Para isso utilize o Image Asset do Android Studio. O nome do ícone é done.
 Após adicionar o ícone no projeto, dentro do <item> utilize o atributo android:icon enviando como referência o Drawable do ícone que foi adicionado.
@@ -1208,7 +1205,6 @@ public class FormularioAlunoActivity extends AppCompatActivity {
 
 @@06
 Sobre o uso de ScrollView
-PRÓXIMA ATIVIDADE
 
 Durante esta aula utilizamos a ScrollView para melhorar a experiência do usuário em relação ao formulário de cadastro de aluno.
 Por qual motivo utilizamos essa View?
@@ -1232,7 +1228,6 @@ Concluímos a segunda parte de fundamentos do Android e, se você chegou até aq
 
 @@08
 Projeto final
-PRÓXIMA ATIVIDADE
 
 Caso tiver alguma dúvida ou quiser consultar o projeto final, incluíndo o desafio, você pode baixá-lo a partir deste link.
 
