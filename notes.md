@@ -894,3 +894,346 @@ Implementar menu de contexto;
 Criar menus via arquivo estático;
 Realizar o processo de inflar menu;
 Configurar listener de menu adequadamente.
+
+#### 11/09/2023
+
+@05-Melhorando experiência do formulário
+
+@@01
+Adicionando o ScrollView
+
+Continuando com assuntos sobre melhoria de experiência de nosso usuário em relação à usabilidade de nosso aplicativo, um outro ponto que faz todo sentido a gente explorar e verificar como é que nosso aplicativo se comporta é em relação à disponibilidade que a gente faz das nossas features e também das views, ou seja, todos os componentes que a gente quer que nosso usuário tenha acesso ou então esteja disponível ali para ele, tudo bem? Sendo assim, o que a gente vai fazer agora vai ser explorar situações diferentes nas quais a gente fez os nossos testes, como por exemplo, ao invés de só verificar como é que nosso aplicativo se comporta com apenas dois alunos na lista de alunos, vamos colocar, por exemplo, 20 alunos, e vamos ver se ainda assim funciona de uma maneira ideal, tudo bem? Então, agora vamos explorar um pouco desse cenário em relação ao que a gente implementou até esse momento, vamos colocar esses primeiros 20 alunos, afinal, 20 ou mais é um comportamento bem comum de ser ver. Vamos entrar no nosso activity, e aqui, dentro dela, vou fazer uma iteração logo no onCreate para que ele adicione esses 20 alunos. Para isso vou usar um For indexável, inclusive posso usar até um template, que é o Fori, que o próprio Android Studio já cria esse For indexável, tudo bem? Ele já faz ali o int i, começando com 0, só colocamos quantas vezes queremos que repita. Nesse caso eu vou colocar 10, afinal a gente coloca 2 alunos aqui, 2 vezes 10 vai dar 20, por isso vou deixar o 10. Agora, estamos colocando nossos 20 alunos para fazer esse teste, para simular essa disponibilidade do nosso aplicativo, agora vamos executar e ver o que acontece. Shift-F10, vamos aguardar o Android Studio finalizar a execução, e a gente verifica como que fica. Ele está finalizando aqui, então vamos só aguardar essa parte de subir o aplicativo. Ele subiu o aplicativo e está mostrando todos os alunos. Tem os mesmos comportamentos, se vai editar ele mostra tudo bonitinho, mas agora temos que ver se ele consegue acessar os próximos alunos, afinal não está completo aqui, mostrando todos os 20. Para acessar, a gente pode usar uma ação muito comum em aplicativos, segurar e arrastar para cima e para baixo, vai dar o efeito de scroll, de rolagem. O nosso aplicativo para esse tipo de situação na qual teremos mais de 20 alunos, 20 alunos, uma quantidade grande de alunos, ele vai estar disponível, tanto ele como nossa app bar, como também nosso float action button, todos esses componentes estão acessíveis, independente se tem uma quantidade muito grande, ou um número aqui de alunos. Então, está tendo uma experiência bacana. Outro detalhe importante, quando estamos fazendo esse tipo de ação é verificar outra orientação, o que quero dizer com isso? Lembre que quando a gente estava usando nosso celular, nem sempre usamos no modo vertical, às vezes a gente deita ele no modo paisagem ou horizontal, portanto, faz todo sentido a gente ver como que nosso aplicativo se comporta nesse tipo de situação, dado que a gente quer entregar a mesma experiência para nosso usuário quando ele rotacionar seu celular, tudo bem? Como que a gente faz isso? A gente pode usar as duas opções da direita, para rotacionar para esquerda, e também essa outra para rotacionar para a direita, ou usar atalhos que ele sugere, ctrl-setinha para esquerda, ctrl-setinha para direita, para ser esquerda e direita, respectivamente. Então, vou usar o ctrl-setinha para esquerda para rotacionar, e na hora que eu rotacionei, veja que ele não rotacionou a tela junto, isso acontece porque o emulador pro padrão está configurado para não fazer a rotação, e dado que estamos no Android 9, temos duas possibilidades aí, no android 9 temos uma possibilidade que ele mostra o ícone quando a gente rotaciona, então deixa eu voltar para direita, e entrando para esquerda, ele mostra o iconezinho aqui, vou clicar nele, ele vai e rotaciona. Essa opção é legal, caso você não queira que o comportamento de rotacionar seja padrão, apenas rotacional quando você quiser, aí é bem bacana, mas caso você queira que sempre rotacione para a orientação em modo paisagem, você vem na parte de cima que é onde fica as notificações, e você clica no ícone terceiro que mostra a ideia de rotacionar, que é o rotacionar automaticamente, dessa maneira você vindo para modo retrato ou paisagem, sempre vai rotacionar. A gente viu que funciona a parte de rotação, vamos explorar como está funcionando, veja que a app bar e o float action button estão acessíveis. A gente scrollar para cima e para baixo, a gente também tem acesso a esses alunos. Então, temos acesso a eles. Realmente, nosso aplicativo está funcionando sem nenhum tipo de problema. Agora, tem um detalhe, pessoal, a gente viu isso na nossa lista de alunos, mas faz todo sentido a gente explorar nossa próxima tela, que seria a tela de formulário. Vou voltar para o nosso modo retrato, e agora, eu vou entrar no nosso formulário. Agora, que estamos aqui, vemos que da maneira que está, vai funcionar, afinal, aqui tem espaço suficiente para poder acessar todos os campos, porém, como a gente sabe, quando estamos dentro de um formulário, vai ser muito comum ter formulários grandes, porque vão ter formulários que vão exigir endereço, e-mail, CPF, e outras informações que não temos aqui, e que vão ser bem comuns de serem preenchidas. Então, se você estiver criando um formulário, talvez esteja numa complexidade muito maior do que o que a gente criou, então faz todo sentido a gente ver como seria o comportamento do formulário caso tivesse mais campos aqui. Vamos de uma maneira via teste, adicionar mais testes, para preencher de uma tal forma que fique grande, o formulário que costuma apresentar para gente na maioria dos aplicativos. Vou entrar no layout do formulário, ctrl-shift-N para pegar arquivos, vou entrar no activity formulário aluno, e vou adicionar aqui novos layouts. Eu estava modificando aqui um pouquinho para ver qual que era a diferença em vários celulares, você também pode fazer isso, nessa opinião daqui de cima, que é o device preview. Então, nela você pode escolher diversos tipos de layout, layouts para nosso pixel 2, para os diversos tipos de celulares, no geral ele costuma deixar esse Nexus 5, tá bom, se você quiser utilizar o qual você está utilizando no emulador, você pode colocar que ele redireciona para você tu do bonitinho, é uma opção bacana para vermos o preview sem ter que executar no emulador, mas para você ter certeza que tudo está funcionando da maneira esperada, faz todo o sentido você executar, então dado que a gente agora está com o preview de acordo com o nosso pixel 2, que estamos usando, vamos adicionar os campos de tal forma que ele vai crescer o suficiente que o botão vai ficar mais acessível apenas olhando de cara e vamos ver como ele esse comporta. Chegando na parte de baixo, vou pegar o edit text, fazer um ctrl-c e ctrl-v só para poder ter as mesmas configurações, vou remover o ID porque dá conflito e acaba não compilando, e vou colocar outro tipo de hint, que é a dica, vou deixar como teste apenas para sabermos que é o campo inválido, na hora que a gente observar que a gente sabe que não é uma coisa para valer. Então deixei como teste e vou agora replicar, fazer o ctrl-C e ctrl-V para ultrapassar os limites do nosso celular. Ultrapassei aqui os limites, estou perto, mais um, e beleza. Pode acontecer que tenha um formulário desse tamanho no momento em que você tiver desenvolvendo. Então, de repente, se alguém mostrar o aplicativo para você, é muito comum ter o formulário mais ou menos nesse tamanho. Vamos agora executar e ver o que acontece. Shift-F10, vamos executar aqui bonitinho, abrir o emulador para ver como fica, e dessa maneira a gente vê o que podemos melhorar. Vamos abrir nosso aplicativo e agora abrir o formulário. Agora, a gente tem nosso formulário, muito grande aqui, às vezes são outros campos, mas vamos assumir que apenas esses campos, vamos ter alguns padrões, mas a ideia é que é um formulário grande. E agora, vamos tentar acessar o botão de salvar para salvar nossas informações, estou segurando, arrastando e ele não vai, e esse é um comportamento padrão que acontece quando a gente implementa o layout. Mas por que lá com a nossa listview foi e aqui não foi? É porque a listview já tem uma implementação na qual permite a ação de scroll, e quando a gente cria um layout nosso, ou na maioria das views que não tem views filhas, a gente não vai ter esse tipo de comportamento, precisamos colocar de maneira manual, aplicando uma outra view, que é conhecida como scroll view. Todas as vezes que você for criar um layout, que você vai perceber que esse layout tende a crescer, que pode ultrapassar ali o tamanho das telas dos celulares, seja para celulares grandes, e principalmente para celulares pequenos, faz todo o sentido você implementar ali o scroll view. Afinal, se a gente mudar ali no nosso próprio preview, para um celular pequenininho, que seria esse nexus 1, de 3.7 polegadas, olha só, ele até ultrapassa numa boa, não precisa de tantos testes como aqui, aqui começa a ultrapassar com 7 campos a mais, aqui com 4 a mais, já era, não temos mais acesso a nada. Então, colocar esse comportamento de scroll é uma coisa muito comum e uma das boas práticas para você utilizar no seu dia a dia, quando você cria um layout que tende a ultrapassar, a ter um comportamento que vai além da tela, seja no momento que você está no modo retrato, e principalmente no momento que você está no modo aqui landscape, modo paisagem, ou horizontal, então sempre fique atento com isso. Inclusive, no preview, também você tem capacidade de mudar para o modo horizontal, e veja que é pior ainda, com apenas um campo, já não tem mais acesso. Essa ação de scroll vai ser necessária quando você criar layouts que ultrapassam e que os componentes que você está usando não tenha scroll interno e você precisa implementar manualmente. Agora, vem a questão, agora que passei a introdução, como colocamos esse scroll view? Para isso, colocamos esse scroll view dentro do nosso layout, só que o scroll view tem peculiaridades, que é o seguinte, não conseguimos colocar o scroll view, dado que é um viewgroup, a gente não consegue colocar um scroll view, vou até colocar aqui, match parent, só para gente fazer o teste, ele sempre coloca o wrap content, porque ele vai sempre crescer conforme o conteúdo. A gente não consegue colocar mais de uma view dentro dele, então, se a gente pensar, poxa, eu quero colocar o scroll view, para os meus edit text, a gente não vai conseguir fazer isso, porque ele vai sempre falar que para poder colocar ele, vai precisar que tenha apenas uma única view filha, então se deixar dessa maneira, não vai funcionar da maneira que a gente espera. Então, se a gente ver aqui, vou executar para vocês verem como fica, ele vai executar nosso aplicativo, e vai apresentar um problema falando que não pode ter mais de uma view que seja uma view raiz, vamos ver como fica, executando. Ele executou aqui, olha só, foi lá e quebrou, então isso acontece porque um scroll view, não pode ter mais de uma view filha, ou seja, quando queremos colocar uma scroll view, temos que colocar dentro de outra view group que vai ter todos seus componentes. Ou seja, temos que colocar como elemento raiz, afinal, a única viewgroup que temos aqui é o linear layout. Então, colocamos no linear layout porque o scroll view pode ter apenas uma view filha. Então, colocando aqui, vou fazer o ctrl-alt-L, e precisamos fazer as configurações do namespace, afinal, ele é o elemento raiz do nosso layout. Então, pegando aqui o namespace bonitinho, não precisamos manter no linear layout, está mostrando aqui bonitinho, inclusive, se eu arrastar aqui, acho que já faz o efeito, deixa eu ver, às vezes ele fez já, alguns testes que eu fiz, ele funcionava, ele vai tentar fazer uma configuração ali, se quiser dar ctrl-Z para não impactar, mas em alguns momentos que fiz testes no preview, funcionava o scroll, então você pode testar dessa maneira. Então, dado que agora a gente está usando o scrollview como nosso elemento raiz, quem estiver como filho, no height, na altura, ele pode manter o wrap content, porque ele vai crescer conforme nosso scroll view. Essas são as recomendações, deixar o scroll view como elemento raiz, só vai poder ter um único filho, que nesse caso é a viewgroup para manter outras views, e ele vai manter sempre a altura como wrap content, porque ele sempre vai crescer conforme o seu conteúdo, e quem for seu filho também vai crescer conforme o conteúdo. Essas são as observações, pode parecer complexo no começo, mas quando você faz uma vez, você acaba se habituando. Bacana, colocamos scroll view, vamos executar e ver o que acontece, certo? Agora que temos o scroll view, comportamento tem que acontecer é que temos que ter a capacidade de rolar nosso formulário e acessar todos os componentes, então aqui vou rolar nosso formulário, agora sim temos acesso a todos os componentes, tanto em cima quanto na parte de baixo, isso no modo horizontal. Se a gente vir no modo vertical, também temos acesso. Então, é dessa maneira que a gente acaba disponibilizando todo o conteúdo de uma view, quando não é acessível ali apensa na primeira tela para nosso usuário, aplicando o scroll view. Então, sempre fique atento quando você implementar uma tela dentro do android, você vai ter que ficar atento para ver se em um momento extremo ou momento comum de uso, que é onde começa a aumentar o conteúdo dentro da view, se também está sendo acessível para o usuário. Se de repente você quiser começar a colocar o scroll view, coloque, fique à vontade. Só lembre-se das regras, tem que ter a única view filha, então veja que se pegar aqui no component 3, a gente vê que tem só uma view filha, fica mais fácil de ver isso, ou você também pode ver dessa parte baixo, scroll view, pega o linear, se você vem no linear, era para ter mostrado todos os outros, mas não mostra porque tem muita coisa, então, ele mostra bonitinho para gente, você pode usar o design para te ajudar. Era isso que eu queria mostrar para vocês, vamos só remover primeiro aqui os outros edit text que não faz sentido manter, vmaos remvoer, removi, voltamos ao layout de antes, vamos executar novamente, nesse momento, quando está executando, você pode mudar o preview que você quer, se quiser manter o que você está usando durante seu desenvolvimento, mantenha seu pixel, e aqui a gente vai ver que consegue manter o comportamento esperado, sem nenhum problema, o que podemos fazer é tirar o código de teste, fazer as muitas iterações, não precisa estar mantendo mais ele, bacana? Então, a gente vai tirar o código, testar para ver se tudo funciona, e a gente garantiu que o comportamento que queria ter foi resolvido, e não vai ter mais nenhum problema, dado que agora a gente aprendeu como consegue deixar disponível todo conteúdo, então, a gente testando aqui, vou clicar no aluno, beleza, aparece, aqui também vai aparecer o formulário, e tudo tranquilo se ficar no modo landscape ou no modo retrato para gente. Veja que nosso aplicativo é bem acessível agora. Bacana, pessoal, é isso que eu queria mostrar para vocês, e até mais.
+
+@@02
+Implementando o ScrollView no layout
+PRÓXIMA ATIVIDADE
+
+Caso você precise do projeto com todas as alterações realizadas na aula passada, você pode baixá-lo neste link.
+Modifique o layout do formulário para que ele suporte a ação de rolagem. Para isso, envolva todo o layout dentro do ScrollView.
+
+Para testar o App, adicione 3 campos a mais no formulário, então, modifique a orientação do dispositivo para horizontal e veja se a barra de rolagem aparece. Interaja com ela e tente acessar o botão Salvar.
+
+Se possível, crie um dispositivo de tela pequena e confira se apresenta o mesmo comportamento.
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/archive/aula-4.zip
+Com essa modificação o App deve apresentar o seguinte aspecto visual:
+
+
+Veja que agora o formulário permite acessar o botão Salvar mesmo que existam muitos campos no formulário.
+
+O código de layout para aplicar o ScrollView e os EditTexts de teste ficou da seguinte maneira:
+
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Nome"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_telefone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Telefone"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="teste" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="teste" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="teste" />
+
+        <Button
+            android:id="@+id/activity_formulario_aluno_botao_salvar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Salvar" />
+
+    </LinearLayout>
+
+</ScrollView>COPIAR CÓDIGO
+Após este exercício, remova os campos de testes, pois eles foram adicionados apenas para simular um formulário com muitos campos.
+
+@@03
+Utilizando menu de opções
+
+Para finalizar o assunto de experiência de usuário em relação a usabilidade do aplicativo, existe mais um ponto que quero passar para vocês, que é o seguinte, pessoal, por mais que tenhamos feito a ação de scroll, por mais que a gente tenha a flexibilidade de aumentar ou diminuir nosso formulário, ainda assim nosso usuário, para que consiga finalizar o cadastro, dependendo do tamanho do formulário, ele vai precisar fazer aqui o scroll, até o botão salvar, ou seja, se ele estiver no celular pequeno, o nexus one, e se ele entrar por modo landscape, o modo horizontal, se tiver três campos não vai ter problema, afinal já vai ter acessível o botão, mas no momento que colocamos um quarto ou quinto campo, que não é muito difícil de ter, ele vai sempre ter que fazer o scroll até o final, e se de repente ele esquecer alguma informação, ele quer preencher de novo alguma informação do nome, ele vai ter que voltar de novo para cima, descer de novo para finalizar o cadastro. Em outras palavras, quando a gente quer colocar um comportamento no qual de repente ele só preenche os três primeiros campos e quer salvar, a gente tem que deixar o comportamento disponível, fazer com que seja fácil para o usuário, existem opções que a gente pode estar utilizando para isso e é justamente isso que vamos explorar durante o curso. Qual seria a opção que a gente poderia estar colocando para que fosse mais flexível e fácil para o usuário ao invés de ter que fazer o scroll até o botão de salvar? Uma das possibilidades é o que a gente viu, por exemplo, quando a gente estava fazendo nosso menu. Quando fizemos o menu para a lista de alunos, vimos que coloca por padrão um menu na app bar, indicando que vai salvar para o nosso usuário. Sendo assim, vamos criar um novo menu que vai ter essa ideia de salvar, e aí vamos colocar no nosso formulário e remover aquele botão, que dessa maneira, o usuário vai conseguir salvar na maneira que quiser, quando quiser, sem ter que fazer vários scrolls. E dependendo do tamanho do formulário ou do celular, a ideia é que seja fácil independente da situação. Então, vamos lá. Para isso, vamos criar um novo menu, sabemos como faz isso, alt-insert no diretório de menu, vamos criar um menu para nosso formulário, então é activity, formulário, aluno, menu. Vamos usar exatamente o mesmo padrão. Agora, vamos colocar aqui um novo item, esse item vai ter um ID já, que vai ter o arroba + ID, e o nome vai ter o mesmo padrão de antes, activity formulário, vou colocar activity formulário aluno, apagar o e-mail e colocar _menu, e _ eu vou colocar a ação dele, que é de salvar. Vou fechar menu, e beleza, a gente criou, como a gente sabe, dentro de cada item do menu é exigido um título, colocamos o atributo title e o título, que é salvar. Temos o ID e o título, somos capazes de inflar o negócio, então para isso a gente vem no nosso formulário aluno activity, e agora precisamos sobrescrever o método que cria o menu que criamos agora. Qual que é o menu, esse do Android é justamente conhecido como options, se a gente voltar no formulário aluno activity, logo embaixo do onCreate mesmo, a gente pode chamar o método onCReate, options, menu, então, quando a gente faz isso, a gente está com a intenção de criar o menu de opções, que é justamente o que mostrou para gente no preview do arquivo do menu, para fazer o inflate é a mesma coisa de contexto, então a gente pega o getmenuinflater, o inflate, mandando a referência do nosso arquivo de menu, então rmenu, activity, formulário aluno menu, e mandando depois o menu que a gente recebe via parâmetro, justamente esse menu de opções. Bacana, agora, que fizemos o inflate, podemos verificar se está aparecendo, agora, shift-F10 para executar. Vamos aguardar o android studio finalizar a execução e ver o que acontece. O android studio conseguiu finalizar a execução, vamos entrar no nosso formulário, e ele está aparecendo as opções de menu, e ele mostra o salvar. Então, ele está conseguindo colocar o comportamento esperado, mas por mais que a gente tentou facilitar, tem dois passos para chegar na ação de salvar, sendo que o ideal seria colocar o menu logo de cara, a opção salvar, e ele vai lá e salva, tudo bem? Para isso, a gente pode estar modificando esse menu, colocar mais atributos que vão colocar esse tipo de comportamento, dentre eles um atributo que vai te indicar como mostra esse menu, por padrão vai ser o menu escondido, e a gente tem a opção de mostrar ele sempre, e é isso que a gente vai fazer, a gente vai colocar o app, porque vai ser um atributo direto do nosso menu, não do android e sim do menu, que vai ser o showAsAction, às vezes não vai mostrar para vocês porque ele precisa fazer o import, então se você vem com setinha pro lado, seja esquerda ou direita, ele vai sugerir o import, você faz o import e ele vai conseguir mostrar para você esse nosso novo atributo. Dentro dele temos várias opções para preencher, tem contexto, never, que é para nunca mostrar, e essas outras opções que não vou falar muito a respeito. Mas dentre elas, o que vamos usar para mostrar sempre é a Always a Always indica que sempre vai mostrar no nosso menu, até faz ali replicando nossa ideia de sempre mostrar e mostrando mais ou menos como vai ficar quando executarmos nosso projeto. Vamos executar e ver como fica agora que a gente sempre está mostrando esse menu ao invés de esconder nas opções. Dessa maneira que a gente acaba configurando nossos menus, para deixar mais com a nossa cara. Então, agora sim temos nosso menu de salvar. Bacana, temos o menu de salvar, e agora a gente precisa colocar a ação realmente de salvar e remover esse botão, afinal não vamos mais utilizar. Agora, vamos modificar todo nosso código para que o comportamento funcione da maneira como eu comentei, para isso vamos remover do formulário, do nosso layout, vai ser o activity formulário aluno, e aqui vamos remover nosso botão, remover aqui o botão, e nosso layout não tem mais o botão da parte debaixo. Não tem mais o botãozinho. Agora, dentro da nossa activity, que é o formulário aluno activity, a gente precisa modificar nosso código, primeiro para não ter referência no botão, porque vamos ter uma exception, por não ter encontrado aquela view, não vamos ter a configuração aqui, e veja que para poder fazer a finalização do cadastro, achamos um único método, então não precisa se preocupar em copiar ou extrair código para facilitar a migração, vamos só remover. Agora, coitado do finaliza formulário que não está sendo usado, mas vamos resolver agora. Mesmo esquema do menu de contexto, vamos ter um método exclusivo para ser o lister do nosso menu de opções, vamos fazer o on, options, item selected, justamente a mesma ideia, que o outro seria on context item select, esse é o on options item selected, exatamente a mesma ideia, qualquer menu que você usar de opções, vai acionar, então a mesma regrinha, filtrar primeiro o menu, e para filtrar podemos usar o parâmetro menu, pegando o ID, dado que temos o ID, item ID, e na parte debaixo, onde está o IF, podemos colocar o item ID, se é == ao nosso R.ID, que vai ser o activity, formulário aluno, menu salvar. Isso mesmo, agora, aqui dentro, vamos e indicamos que vai finalizar nosso formulário quando entrar nesse momento do listener, quando identificar que foi tocado essa opção, do menu, e a gente quer que finaliza. Bacana, conseguimos fazer a migração do nosso código, vamos executar e ver o que acontece, para isso vou abrir o aplicativo, aguardar o android studio finalizar e ver se tudo funciona da maneira esperada. Está carregando aqui e a gente já testa tudo bonitinho. Temos nosso aplicativo que queremos testar ao nosso formulário. Nosso formulário, só queremos cadastrar um aluno, vou cadastrar o Gui, cadastrei o Gui e salvou tudo bonitinho. Quero editar o Gui, novamente vamos colocar o Gui Silveira para participar com a gente, Gui Silveira vai ser editado e beleza, conseguimos colocar. Vamos ver o que acontece quando a gente tenta fazer no landscape para ver como é essa ação, dado que essa foi uma das grandes motivações para utilizar. Ele fica aqui disponível, não temos que dar scroll ou se preocupar se o formulário é grande ou pequeno. Essa é uma das grandes vantagens que acabamos tendo. Vou colocar a Maria, percebe quando fazemos a edição via landscape, ele preenche toda a tela para deixar disponível todo o teclado, e também ficar visível todo o conteúdo disponível. Aí ele até utiliza uma técnica para tentar facilitar que seria esse next, aqui aparece o nome para não ter que ficar fechando ou entrando de novo no edit text, ele faz o next e mostra o hint primeiro, depois a gente preenche aqui, faz um next, ele preenche tudo bonitinho e quando vê que não tem mais nenhum edit text ou outro campo que precisa ser preenchido, ele faz o done e mostra o que foi preenchido, então é outra abordagem bacana. Agora eu vou salvar. Salvei, e a Maria foi salva, só que agora tem um detalhe, até no outro vídeo aconteceu, não dei tanta atenção, que novamente mostrou o Alex e a Fran. Por que isso aconteceu? Porque todas as vezes que a gente rotacional nosso celular, o que acontece? A nossa activity que estava ali acaba sendo destruída, ou seja, vai ser recriada, essa activity não é a mesma referência, o mesmo objeto que foi criado quando a gente executou o aplicativo. O que isso implica? Se a gente vê aqui nosso código de lista alunos activity, todas as vezes que uma activity é criada, que entra nesse estado, ela sempre está salvando dois alunos, então já que estamos fazendo esse teste, vamos ter esse comportamento todas as vezes que a gente rotacionar, porque a rotação sempre vai destruir a activity e criar novamente, e nossos dados são estáticos, então sempre vão ser mantidos, tudo que você estiver mantendo e maneira estática você pode perder o risco caso rotacionar, a gente não corre tanto risco novamente porque é um teste, não é para valer e estamos desenvolvendo, não precisa se preocupar com isso, mas apenas fique atento que se você tiver fazendo alguma coisa dentro de um create que é estático, você vai ter que tomar cuidados. Esse era o feedback que eu queria passar em relação a rotação, sempre vai destruir a activity, vai passar pelo processo de criação, start, resumo e assim por diante. Agora que conseguimos colocar o comportamento, um último passo é se ao invés de colocar todo esse texto a gente colocasse um ícone para representar esse cara. Essa parte de salvar, afinal, poderíamos ter um título grande, salvar o aluno, e ficaria bem grande, imagina como ficaria esse salvar o aluno em um celular pequeno. Vamos ver, ficou super grande, e se a gente pegar nosso formulário de novo, formulário, aluno, a gente percebe que aqui ia ficar muito estranho pro nosso nexus, ele ia pegar muito espaço aqui do nosso nexus, até mesmo do pixel 2 fica estranho, vamos testar. Acho que já fica estranho. Quando a gente faz os menus na appbar, às vezes vale até a pena a gente investir na ideia de colocar um ícone para representa, e dado que tenha essa ideia de não ocupar tanto espaço, vamos colocar esse ícone. É da mesma maneira como fizemos com o float action button, a gente vem aqui no nosso drawable, pegamos o asset, e o asset que é muito comum de colocar, para salvar alguma coisa no clipart, claro, é o que a gente chama de feito, o famoso done, quando a gente tem esse done, é aquele visto que a gente vê na escola, está finalizado. E a gente pode estar utilizando isso. Aí no cAction a gente pode falar que é salvar, salvar aluno, e vamos usar as mesmas configurações de antes, aqui não precisam modificar mais nada, um next aqui, um next de novo, e no menu, a gente coloca um atributo chamado de icon, nesse icon a gente coloca o que esperamos. Completei automaticamente, ele veio o novo aluno, na verdade é o salvar aluno, e ele coloca o ícone para gente. Vamos só executar e a gente vê se bate com o esperado. Por mais que seja salvar o aluno, não vai ocupar tanto espaço assim. Você pode colocar a descrição no título, fique à vontade, se for salvar aluno, da maneira como você preferir. O que vai impactar, agora que tem o ícone? A gente vai ver que tem o ícone aqui e o que vai impactar. Quando a gente tem um título, a gente pressiona o ícone e ele mostra para o usuário. Por que esse é o comportamento padrão? Quando a gente trabalha com o ícone, nem todo mundo está habituado ao que o ícone faz, ou ferramenta de acessibilidade, vai conseguir instruir a pessoa que não está identificando o que o ícone faz. Nesses casos, pressionamos e ele indica o que a informação precisa, o que ela faz. Por isso que o title, se você quiser colocar mais informação, salvando, ele salva isso ou aquilo, você pode colocar, não precisa se preocupar em deixar tão enxuto assim, a não ser que você não vá coloca nenhum ícone, deixar apenas um texto, que é comum no menu de contexto, esses são os detalhes que vale à pena tomar atenção, vamos salvar o Gui, vou salvar de novo o Gui, ele funcionou, vou editar o Gui, vamos ver se funciona, ele edita o Gui Silveira de novo, participando conosco, e agora ele foi lá e editou também, então esse era o último detalhe, conseguimos finalizar a parte da experiência do nosso usuário em relação a usabilidade, até mais.
+
+@@04
+Salvando aluno via menu de opções
+PRÓXIMA ATIVIDADE
+
+Para evitar que o usuário tenha que realizar a ação de scroll para salvar o aluno, modifique o formulário para que tenha um menu na App Bar que vai ter o comportamento de salvar o aluno.
+Sendo assim, crie um menu de opções sobrescrevendo o método onCreateOptionsMenu(). A criação do menu de opções é da mesma maneira que o menu de contexto, portanto, crie o arquivo estático de menu com um item contendo um id e um título.
+
+Inclua como título o texto "Salvar" ou qualquer sinônimo indicando que o aluno será salvo.
+Implemente o listener para o menu, fazendo com que ele salve o aluno ao ser tocado. Aplique o filtro da mesma maneira como foi feito no menu de contexto.
+
+Teste o App e veja se aparece o menu de opções com o texto "Salvar". Toque nele e confira se os dados do formulário são salvos de acordo com a ação do formulário.
+
+O App deve apresentar o seguinte aspecto visual:
+
+
+Em código temos o seguinte resultado:
+
+activity_formulario_aluno_menu.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/activity_formulario_aluno_menu_salvar"
+        app:showAsAction="always"
+        android:title="Salvar"/>
+</menu>COPIAR CÓDIGO
+FormularioAlunoActivity.java:
+public class FormularioAlunoActivity extends AppCompatActivity {
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater()
+                .inflate(R.menu.activity_formulario_aluno_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.activity_formulario_aluno_menu_salvar){
+            finalizaFormulario();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // restante do código
+
+}COPIAR CÓDIGO
+A seguir vamos refatorar o projeto, fazendo com que o menu seja um ícone e o botão de salvar não seja mais mantido.
+
+@@05
+Adicionando o ícone no menu
+PRÓXIMA ATIVIDADE
+
+Adicione o ícone no menu de salvar o aluno. Para isso utilize o Image Asset do Android Studio. O nome do ícone é done.
+Após adicionar o ícone no projeto, dentro do <item> utilize o atributo android:icon enviando como referência o Drawable do ícone que foi adicionado.
+
+Em seguida, remova o botão do layout do formulário, como também o método que faz a configuração de listener para o botão.
+
+Perceba que agora que não existe mais o botão, o App quebra caso seja feita uma busca o referenciando.
+Teste o App e veja se ainda é mantido o mesmo comportamento no formulário, porém, aparecendo um ícone no menu de opções. O botão Salvar não deve aparecer nesse teste.
+
+O App deve apresentar o seguinte aspecto visual:
+
+
+O código de implementação ficou da seguinte maneira:
+
+activity_formulario_aluno_menu.xmlk:
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/activity_formulario_aluno_menu_salvar"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_salvar_aluno"
+        android:title="Salvar o aluno"/>
+</menu>COPIAR CÓDIGO
+O título do menu foi mantido como "Salvar o aluno", mas você não precisa manter o mesmo nome, pode ser apenas "Salvar" se preferir.
+
+No código do layout e Activity para o formulário, não tiveram adições, apenas foi feita a remoção do código que dava suporte ao botão de salvar. Seguem abaixo os códigos com a remoção do botão salvar:
+
+activity_formulario_aluno.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Nome"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_telefone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Telefone"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress" />
+
+    </LinearLayout>
+
+</ScrollView>COPIAR CÓDIGO
+FormularioAlunoActivity.java:
+package br.com.alura.agenda.ui.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import br.com.alura.agenda.R;
+import br.com.alura.agenda.dao.AlunoDAO;
+import br.com.alura.agenda.model.Aluno;
+
+import static br.com.alura.agenda.ui.activity.ConstantesActivities.CHAVE_ALUNO;
+
+public class FormularioAlunoActivity extends AppCompatActivity {
+
+    private static final String TITULO_APPBAR_NOVO_ALUNO = "Novo aluno";
+    private static final String TITULO_APPBAR_EDITA_ALUNO = "Edita aluno";
+    private EditText campoNome;
+    private EditText campoTelefone;
+    private EditText campoEmail;
+    private final AlunoDAO dao = new AlunoDAO();
+    private Aluno aluno;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_formulario_aluno);
+        inicializacaoDosCampos();
+        carregaAluno();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater()
+                .inflate(R.menu.activity_formulario_aluno_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.activity_formulario_aluno_menu_salvar){
+            finalizaFormulario();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void carregaAluno() {
+        Intent dados = getIntent();
+        if (dados.hasExtra(CHAVE_ALUNO)) {
+            setTitle(TITULO_APPBAR_EDITA_ALUNO);
+            aluno = (Aluno) dados.getSerializableExtra(CHAVE_ALUNO);
+            preencheCampos();
+        } else {
+            setTitle(TITULO_APPBAR_NOVO_ALUNO);
+            aluno = new Aluno();
+        }
+    }
+
+    private void preencheCampos() {
+        campoNome.setText(aluno.getNome());
+        campoTelefone.setText(aluno.getTelefone());
+        campoEmail.setText(aluno.getEmail());
+    }
+
+    private void finalizaFormulario() {
+        preencheAluno();
+        if (aluno.temIdValido()) {
+            dao.edita(aluno);
+        } else {
+            dao.salva(aluno);
+        }
+        finish();
+    }
+
+    private void inicializacaoDosCampos() {
+        campoNome = findViewById(R.id.activity_formulario_aluno_nome);
+        campoTelefone = findViewById(R.id.activity_formulario_aluno_telefone);
+        campoEmail = findViewById(R.id.activity_formulario_aluno_email);
+    }
+
+    private void preencheAluno() {
+        String nome = campoNome.getText().toString();
+        String telefone = campoTelefone.getText().toString();
+        String email = campoEmail.getText().toString();
+
+        aluno.setNome(nome);
+        aluno.setTelefone(telefone);
+        aluno.setEmail(email);
+    }
+}
+
+@@06
+Sobre o uso de ScrollView
+PRÓXIMA ATIVIDADE
+
+Durante esta aula utilizamos a ScrollView para melhorar a experiência do usuário em relação ao formulário de cadastro de aluno.
+Por qual motivo utilizamos essa View?
+
+Para permitir a ação de rolagem em Views que o conteúdo ultrapassa o limite da tela.
+ 
+Isso mesmo! Por meio do ScrollView somos capazes de tornar acessível todo conteúdo que não é apresentado na tela para o usuário por ultrapassar o tamanho disponível na tela.
+Alternativa correta
+Para que o botão de salvar permanecesse sempre fixo e visível para o usuário independentemente do tamanho do formulário.
+ 
+Alternativa correta
+Para que seja possível a adição de um menu de opções na App Bar da View.
+ 
+Alternativa correta
+Para que AdapterViews apresente o aspecto de rolagem assim como vimos na ListView.
+
+@@07
+Conclusão
+
+Concluímos a segunda parte de fundamentos do Android e, se você chegou até aqui, você está de parabéns porque, durante esse curso, a gente aprendeu novas features, técnicas e cuidados que a gente tem que ter quando a gente está desenvolvendo os nossos aplicativos. Aproveitando esse momento de conclusão, eu vou revisar todo o conteúdo que a gente aprendeu para ver o tanto que a gente ganhou. Então, vamos referificar tudo que a gente aprendeu. Pessoal, quando a gente começou o curso, a gente pegou o projeto que a gente desenvolveu no primeiro curso, que, a princípio, ele só listava os alunos e permitia uma inserção de alunos clicando no float action button, abrindo o formulário e colocando as informações do nosso aluno. A gente salvava o nosso aluno e ele aparecia para a gente. A gente tinha esse tipo de cenário e a gente viu que existia uma necessidade a mais, como por exemplo editar e remover alunos. Partindo desse princípio, a gente começou a desenvolver esse curso. A gente começou justamente pela parte de edição, que foi o seguinte comportamento: clicando aqui no aluno, a gente abria ele no formulário novamente, colocava a edição que a gente queria - como é o caso do Gui, eu estou colocando Gui Silveira - e ia lá e editava. Para conseguir fazer isso, a gente teve alguns desafios, como foi o caso de colocar um listener para a listview, que a gente viu que tinha que colocar um listener diferente daquele “on click listener”, que era o “on item click listener”, dado que adapter views funcionam dessa maneira por padrão. Se a gente colocar o “on click listener”, ele colocava uma exceção para a gente e quebrava o nosso aplicativo, então foi realmente o primeiro contato que a gente teve aqui quebrando o aplicativo. Para poder explorar isso, a gente aprendeu que existe o nosso logcat , que é capaz de mostrar tudo que acontece durante a execução do nosso aplicativo, tudo que acontece com o nosso dispositivo que a gente está usando no android studios, é uma ferramenta muito bacana e poderosa para nos ajudar durante o desenvolvimento. É claro, quando a gente utilizou o logcat, a gente aprendeu também a colocar logs para poder testar. Por exemplo, quando a gente queria testar o nosso listener, geralmente a gente colocava um toast e a gente viu que tinha possibilidade de colocar um log, colocando esse log para poder aparecer aqui, por exemplo, para ver se pegava o aluno com base na sua posição. Então, esse foi um dos usos que a gente fez do nosso log. A gente percebeu que ele é muito mais simples, ele mantém o histórico de quantas vezes foi tocado um elemento e assim por diante. Então, ele acaba tendo seus benefícios e a gente não precisa ter um feedback da tela porque também o toast mostra, desaparece, a gente não tem mais feedback nenhum. Então, o log acaba sendo útil nesse tipo de sentido. Claro, a gente viu também que, para poder possibilitar essa feature, a gente teve que transferir dados entre as activities. Para isso a gente utilizou o extra, da intent; para isso, a gente teve que transformar o nosso objeto em objeto serializável, afinal, esses dados, para serem transferidos, têm que se transformar em bytes e de bytes para objetos, e a gente aprendeu como a gente pode colocar isso a partir da interface serializer. A gente fez diversas implementações, por exemplo, até mesmo na nossa classe aluno. Nela, olha só o que a gente colocou: a gente colocou essa interface e também agora a gente colocou init, justamente para permitir uma ação de edição e uma ação de inserção dentro do nosso formulário, porque, a partir desse intent a gente verifica quando o usuário vai ter que ser editado ou então quando ele vai ser inserido, porque vai ser considerado um usuário novo. Para isso, a gente teve que fazer diversos passos, como é o caso de verificar se tem um extra, inicializar o aluno e assim por diante. A gente aprendeu tudo desses detalhes, a gente viu os problemas que isso pode ocasionar caso a gente não tenha cuidado e a gente soube lidar muito bem, então a gente conseguiu fazer isso. Na parte de remoção, a gente viu que tinha que ter uma ação diferente para fazer remoção, afinal, a gente já tinha usado o clique, a gente já tinha feito o listener de click. A gente aprendeu que existe um outro tipo de clique aqui no android, como é o caso do clique longo, que é quando a gente clica, segura e pressiona algum elemento, alguma view. A gente aprendeu que existe um listener específico para isso, que é o “on item long click listener” e a gente também aprendeu que, quando a gente faz uma ação diretamente só no listener, como é o caso da remoção, que é uma ação perigosa, a gente tem que tomar alguns cuidados, afinal, o nosso usuário pode perder essas informações. Para isso, a gente viu que existem alternativas que acabam informando o nosso usuário, como é o caso do menu de contexto, que é o famoso botão direito dos sistemas operacionais. A gente aprendeu a colocar esse menu de contexto, que deu introdução de menus no android. Para isso, a gente aprendeu que, para colocar menus, a gente pode utilizar o mesmo esquema de layouts, que é criando um diretório de menu, um arquivo de menu, e a gente aprendeu a colocar os menus aqui com base nas regras, certo? Então, a gente colocou tanto menu de contexto como também o menu de opções, que é esse aqui, esse menuzinho aqui de cima que fica na app bar, a gente aprendeu a fazer isso também. Tanto essa parte de remoção quanto aquela parte que usa o menu de opções acabam funcionando da maneira esperada. A gente viu que, para colocar o listener, é uma maneira diferente até mesmo para criar, eles são muito vinculados com a activity, a partir de uma sobrescrita de método. A gente viu também as suas peculiaridades, como é o caso de, por exemplo, se você vai querer colocar um listener, você tem que saber exatamente, tem que filtrar que aquele é o menu que você deseja. A gente viu que isso pode gerar um problema caso não tenha algum tipo de cuidado. Claro, além disso, a gente viu um pouquinho mais da experiência do usuário que ele tem com o nosso aplicativo em relação à questão de diversos tipos de dispositivos que o nosso aplicativo pode estar executando, como é o caso de uma orientação que a gente coloca no modo vertical ou então no modo horizontal, a gente viu que isso tem seus impactos. E que, no geral, para a gente conseguir dar um suporte melhor, dado que a nossa tela pode ser grande, é colocando um scroll view, que vai dar a ideia de um scroll. A gente aprendeu sobre isso, a gente viu também sobre aquele detalhe que, quando a gente faz a rotação, a nossa activity é destruída e ela executa novamente desde o processo de criação, e foi por isso que ele salvou novamente esses alunos, porque a gente estava usando como teste durante o nosso desenvolvimento. Claro, se você já quiser remover esses alunos, fique à vontade, você pode remover esses alunos que não vai ter nenhum problema, a gente vai manter o mesmo comportamento. Eu acabo deixando só para facilitar os nossos testes e, durante o desenvolvimento, é muito comum você também deixar. E a gente viu que tem também essas peculiaridades. Por fim, pessoal, a gente aplicou uma refatoração no nosso código. A gente aprendeu, por exemplo, que existem passos que não faz muito sentido a gente ficar executando diretamente, como é o caso de configurar a lista a cada on resume, não faz sentido a gente fazer isso. E, para isso, a gente acabou utilizando, explorando bastante o nosso adapter. Ao invés de ter que configurar a lista novamente para poder atualizar a lista de alunos, a gente simplesmente pede para o adapter, que já foi criado uma vez, que é a única vez necessária, ele atualizar essas informações para a gente. Então, percebe que, realmente, foi bastante conteúdo. A gente teve diversos desafios aqui, bastante coisa nova em relação ao que a gente aprendeu em relação ao que a gente aprendeu no primeiro curso e eu espero que você esteja contente com tudo que você aprendeu aqui. Eu espero muito que você já consiga fazer o mínimo no seu projeto, que você já consiga entregar um CRUD, que é geralmente o que é comum de ser feito no primeiro contato de um projeto. Eu conto com o seu feedback agora que você concluiu esse curso, eu espero que você esteja bastante contente. Um forte abraço, até mais.
+
+@@08
+Projeto final
+PRÓXIMA ATIVIDADE
+
+Caso tiver alguma dúvida ou quiser consultar o projeto final, incluíndo o desafio, você pode baixá-lo a partir deste link.
+
+https://github.com/alura-cursos/fundamentos-android-parte-2/archive/aula-5.zip
